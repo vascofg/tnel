@@ -1,6 +1,6 @@
 ## JAX-RS with Grizzly
 
-JAX-RS is a great way to build RESTful services in Java. This is a very quick and simple example of a REST service that lets you upload a file and later download it.
+JAX-RS is a great way to build RESTful services in Java. This is a very quick and simple example of a REST service.
 
 ## Build and Run
 
@@ -18,26 +18,20 @@ The POM file uses the [appassembler plugin](http://mojo.codehaus.org/appassemble
 
 (On Windows use target/bin/app.bat instead)
 
-## Upload a file
+## WADL
 
-    $ curl http://localhost:9998/blob -F "file=@myfile.ext;filename=myfile.ext"
+A .WADL file describes the resources provided by a service and the relationships between them.
 
-will upload the file `myfile.ext` from current directory.
+After running the app the WADL file will be available at */application.wadl.
 
-## Download the file
+## Heroku
 
-    $ curl -O http://localhost:9998/blob/myfile.ext
+There is already an app configured in Heroku [here](http://blooming-savannah-4545.herokuapp.com/).
 
-will save the file you just uploaded in the current directory
+To deploy to it, you have to add the remote to your git repository:
 
-## Deploying to Heroku
+    heroku git:remote -a blooming-savannah-4545
+    
+And then it's as simple as
 
-Assuming you're already set up with Heroku, all you need to do to is:
-
-1. heroku create --stack cedar
-2. git push heroku master
-
-It's that simple. 
-
-Note that files uploaded to Heroku using this app will get stored on the ephemeral disk space of the dyno receiving the file. These files are lost each time dynos are restarted, so you have a bit more homework to do before you have your own personal dropbox service.
-
+    git push heroku master
