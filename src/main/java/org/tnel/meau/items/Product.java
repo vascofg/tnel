@@ -1,6 +1,9 @@
-package org.example.items;
+package org.tnel.meau.items;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by vascofg on 18-05-2015.
@@ -18,7 +21,7 @@ public class Product {
     @XmlElement(required=true)
     protected int price;
 
-    public Product(){};
+    public Product(){}
 
     public Product(int id, String name, String description, int price) {
         this.id = id;

@@ -1,13 +1,12 @@
-package org.example.resources;
+package org.tnel.meau.resources;
 
-import java.io.*;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.StreamingOutput;
-
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
+import java.io.*;
 
 @Path("/blob")
 public class BlobResource {
