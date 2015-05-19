@@ -1,22 +1,28 @@
-import java.util.ArrayList;
+package org.tnel.meau.participants;
+
+import org.tnel.meau.items.Attribute;
+import org.tnel.meau.items.Product;
+
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Buyer {
 
-    ArrayList<Attribute> attributePreferences;
-    ArrayList<Integer> productValue;
+    /*List<Attribute> attributePreferences;
+    List<Integer> productValue;
     float maxBuyPrice, minProductUtility;
     Product category;
 
     Buyer(float maxBuyPrice, Product category) {
         this.maxBuyPrice = maxBuyPrice;
         this.category = category;
-        attributePreferences = new ArrayList<Attribute>();
-        setAttributePreferences(category.getAttributes());
+        attributePreferences = new LinkedList<>();
+        setAttributePreferences(category.getAttributeList());
     }
 
-    void setAttributePreferences(ArrayList<Attribute> productAtrributes) {
-        System.out.println("Product attributes:"+productAtrributes);
+    void setAttributePreferences(List<Attribute> productAtrributes) {
+        System.out.println("Product attributes:" + productAtrributes);
 
         Scanner in = new Scanner(System.in);
 
@@ -30,8 +36,8 @@ public class Buyer {
     void printAttributePreferences() {
         System.out.println("Buyer preferences: ");
         for (int i = 0; i < attributePreferences.size(); i++) {
-            System.out.println("Attribute: "+ attributePreferences.get(i).getName());
+            System.out.println("Attribute: " + attributePreferences.get(i).getName());
             System.out.println("\tValue: " + attributePreferences.get(i).getValue());
         }
-    }
+    }*/
 }
