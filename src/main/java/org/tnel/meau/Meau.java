@@ -73,6 +73,7 @@ public class Meau {
 
         // Start server
         server.start();
+        System.out.println("[JETTY] Started server: " + server.getURI());
         server.join();
     }
 }
