@@ -2,18 +2,15 @@ package org.tnel.meau.items;
 
 import com.wordnik.swagger.annotations.ApiModel;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @XmlRootElement(name = "product")
-@ApiModel(value="Product", description="Product model")
+@ApiModel(value = "Product", description = "Product model")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Product {
 
-    @XmlElement(required = true)
-    protected int id;
     @XmlElement(required = true)
     protected String name;
     @XmlElement(required = true)
@@ -21,22 +18,20 @@ public class Product {
     @XmlElement(required = true)
     protected int price;
 
+    @XmlElementWrapper(name = "attributes")
+    @XmlElements({
+            @XmlElement(name = "boolean", type = BooleanAttribute.class),
+            @XmlElement(name = "descriptive", type = DescriptiveAttribute.class),
+            @XmlElement(name = "numeric", type = NumericAttribute.class)})
+    protected List<Attribute> attributeList = new LinkedList<>();
+
     public Product() {
     }
 
-    public Product(int id, String name, String description, int price) {
-        this.id = id;
+    public Product(String name, String description, int price) {
         this.name = name;
         this.description = description;
         this.price = price;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -62,4 +57,13 @@ public class Product {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    public List<Attribute> getAttributeList() {
+        return attributeList;
+    }
+
+    public void addAttribute(Attribute attribute) {
+        this.attributeList.add(attribute);
+    }
+
 }

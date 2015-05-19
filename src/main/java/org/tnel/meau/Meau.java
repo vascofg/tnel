@@ -4,6 +4,9 @@ import jade.core.Profile;
 import jade.core.ProfileImpl;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.tnel.meau.items.BooleanAttribute;
+import org.tnel.meau.items.DescriptiveAttribute;
+import org.tnel.meau.items.NumericAttribute;
 import org.tnel.meau.items.Product;
 
 import java.util.LinkedList;
@@ -15,7 +18,7 @@ import java.util.List;
  */
 public class Meau {
 
-    public static List<Product> products = new LinkedList<Product>();
+    public static List<Product> products = new LinkedList<>();
     public static jade.wrapper.AgentContainer mainContainer = null;
 
     public static void main(String[] args) throws Exception {
@@ -44,8 +47,14 @@ public class Meau {
         server.setHandler(root);
 
         // Add sample data
-        products.add(new Product(1, "Batatas vermelhas", "Batatas ideais para fritar", 20));
-        products.add(new Product(2, "Batatas brancas", "Batatas ideais para cozer", 18));
+        products.add(new Product("Batatas vermelhas", "Batatas ideais para fritar", 20));
+        products.add(new Product("Batatas brancas", "Batatas ideais para cozer", 18));
+
+        products.get(0).addAttribute(new BooleanAttribute("descascadas", true));
+        products.get(0).addAttribute(new NumericAttribute("peso", 1.5f));
+        products.get(0).addAttribute(new DescriptiveAttribute("cor", "vermelho"));
+        products.get(1).addAttribute(new NumericAttribute("peso", 2.25f));
+        products.get(1).addAttribute(new DescriptiveAttribute("cor", "branco"));
 
         // Start JADE
 
@@ -61,14 +70,14 @@ public class Meau {
         mainContainer = rt.createMainContainer(profile);
 
         // now set the default Profile to start a container
-        ProfileImpl pContainer = new ProfileImpl(null, 1200, null);
+        /*ProfileImpl pContainer = new ProfileImpl(null, 1200, null);
 
         jade.wrapper.AgentContainer cont = rt.createAgentContainer(pContainer);
 
-        /*System.out.println("[JADE]Launching the rma agent on the main container ...");
+        System.out.println("[JADE]Launching the rma agent on the main container ...");
         AgentController rma = mainContainer.createNewAgent("rma",
                 "jade.tools.rma.rma", new Object[0]);
-        rma.start();*/
+        rma.start(); */
 
 
         // Start server
