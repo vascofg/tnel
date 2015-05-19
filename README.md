@@ -10,11 +10,11 @@ Build the code with:
 
 ## Heroku
 
-There is already an app configured in Heroku [here](http://blooming-savannah-4545.herokuapp.com/).
+There is already an app configured in Heroku [here](http://meau.herokuapp.com/).
 
 To deploy to it, you have to add the remote to your git repository:
 
-    heroku git:remote -a blooming-savannah-4545
+    heroku git:remote -a meau
     
 And then it's as simple as
 

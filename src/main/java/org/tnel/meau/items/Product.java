@@ -5,23 +5,21 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Created by vascofg on 18-05-2015.
- */
-@XmlRootElement(name="product")
+@XmlRootElement(name = "product")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Product {
 
-    @XmlElement(required=true)
+    @XmlElement(required = true)
     protected int id;
-    @XmlElement(required=true)
+    @XmlElement(required = true)
     protected String name;
-    @XmlElement(required=true)
+    @XmlElement(required = true)
     protected String description;
-    @XmlElement(required=true)
+    @XmlElement(required = true)
     protected int price;
 
-    public Product(){}
+    public Product() {
+    }
 
     public Product(int id, String name, String description, int price) {
         this.id = id;

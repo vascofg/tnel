@@ -15,10 +15,10 @@ import java.util.List;
  */
 public class Meau {
 
-    public static List<Product> products= new LinkedList<Product>();
+    public static List<Product> products = new LinkedList<Product>();
     public static jade.wrapper.AgentContainer mainContainer = null;
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         // The port that we should run on can be set into an environment variable
         // Look for that variable and default to 8080 if it isn't there.
         String webPort = System.getenv("PORT");

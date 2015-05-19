@@ -11,7 +11,7 @@ import java.util.List;
 public class ProductsResource {
 
     @GET
-    @Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Product> getProducts() {
         return Meau.products;
     }
