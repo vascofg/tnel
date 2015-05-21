@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Seller extends Participant {
 
-    @XmlAttribute
+    @XmlAttribute(name = "sellerProperty")
     String sellerProperty = "seller test!";
 
     public Seller() {
