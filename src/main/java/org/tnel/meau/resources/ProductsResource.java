@@ -10,6 +10,7 @@ import org.tnel.meau.items.Product;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/products")
@@ -28,17 +29,27 @@ public class ProductsResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @ApiOperation(value = "Get product by index")
     public Product getProduct(@PathParam("index") int index) {
-        return Meau.getProducts().get(index);
+        try {
+            return Meau.getProducts().get(index);
+        } catch (IndexOutOfBoundsException e) {
+            throw new WebApplicationException(Response.status(
+                    Response.Status.BAD_REQUEST).
+                    entity("Element not found").
+                    build());
+        }
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Insert a product")
     public Product addProduct(Product product) {
-        if(Meau.getProducts().add(product))
+        if (Meau.getProducts().add(product))
             return product;
         else
-            throw new InternalServerErrorException();
+            throw new WebApplicationException(Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR).
+                    entity("Error adding element").
+                    build());
     }
 
     @Path("/{index}/attribute/boolean")
@@ -47,10 +58,13 @@ public class ProductsResource {
     @ApiOperation(value = "Add a boolean attribute to a product")
     public Product addBooleanAttribute(@PathParam("index") int index, BooleanAttribute attribute) {
         Product product = Meau.getProducts().get(index);
-        if(product.addAttribute(attribute))
+        if (product.addAttribute(attribute))
             return product;
         else
-            throw new InternalServerErrorException();
+            throw new WebApplicationException(Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR).
+                    entity("Error adding element").
+                    build());
     }
 
     @Path("/{index}/attribute/descriptive")
@@ -59,10 +73,13 @@ public class ProductsResource {
     @ApiOperation(value = "Add a descriptive attribute to a product")
     public Product addDescriptiveAttribute(@PathParam("index") int index, DescriptiveAttribute attribute) {
         Product product = Meau.getProducts().get(index);
-        if(product.addAttribute(attribute))
+        if (product.addAttribute(attribute))
             return product;
         else
-            throw new InternalServerErrorException();
+            throw new WebApplicationException(Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR).
+                    entity("Error adding element").
+                    build());
     }
 
     @Path("/{index}/attribute/numeric")
@@ -71,10 +88,13 @@ public class ProductsResource {
     @ApiOperation(value = "Add a numeric attribute to a product")
     public Product addNumericAttribute(@PathParam("index") int index, NumericAttribute attribute) {
         Product product = Meau.getProducts().get(index);
-        if(product.addAttribute(attribute))
+        if (product.addAttribute(attribute))
             return product;
         else
-            throw new InternalServerErrorException();
+            throw new WebApplicationException(Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR).
+                    entity("Error adding element").
+                    build());
     }
 
 }

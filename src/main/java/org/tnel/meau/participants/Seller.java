@@ -2,7 +2,6 @@ package org.tnel.meau.participants;
 
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import org.tnel.meau.agents.BuyerAgent;
 import org.tnel.meau.agents.SellerAgent;
 
 import javax.xml.bind.annotation.XmlAttribute;
