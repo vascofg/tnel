@@ -35,8 +35,10 @@ public class ProductsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Insert a product")
     public Product addProduct(Product product) {
-        Meau.getProducts().add(product);
-        return product;
+        if(Meau.getProducts().add(product))
+            return product;
+        else
+            throw new InternalServerErrorException();
     }
 
     @Path("/{index}/attribute/boolean")
@@ -45,8 +47,10 @@ public class ProductsResource {
     @ApiOperation(value = "Add a boolean attribute to a product")
     public Product addBooleanAttribute(@PathParam("index") int index, BooleanAttribute attribute) {
         Product product = Meau.getProducts().get(index);
-        product.addAttribute(attribute);
-        return product;
+        if(product.addAttribute(attribute))
+            return product;
+        else
+            throw new InternalServerErrorException();
     }
 
     @Path("/{index}/attribute/descriptive")
@@ -55,8 +59,10 @@ public class ProductsResource {
     @ApiOperation(value = "Add a descriptive attribute to a product")
     public Product addDescriptiveAttribute(@PathParam("index") int index, DescriptiveAttribute attribute) {
         Product product = Meau.getProducts().get(index);
-        product.addAttribute(attribute);
-        return product;
+        if(product.addAttribute(attribute))
+            return product;
+        else
+            throw new InternalServerErrorException();
     }
 
     @Path("/{index}/attribute/numeric")
@@ -65,8 +71,10 @@ public class ProductsResource {
     @ApiOperation(value = "Add a numeric attribute to a product")
     public Product addNumericAttribute(@PathParam("index") int index, NumericAttribute attribute) {
         Product product = Meau.getProducts().get(index);
-        product.addAttribute(attribute);
-        return product;
+        if(product.addAttribute(attribute))
+            return product;
+        else
+            throw new InternalServerErrorException();
     }
 
 }

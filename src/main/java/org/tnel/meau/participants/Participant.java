@@ -23,9 +23,14 @@ public abstract class Participant {
 
     ;
 
-    public Participant(String name, ContainerController containerController, Class agentClass) throws StaleProxyException {
+    public Participant(String name, ContainerController containerController, String agentClassName) throws StaleProxyException {
         this.name = name;
-        this.agentController = containerController.createNewAgent(name, agentClass.getName(),
+        this.agentController = containerController.createNewAgent(name, agentClassName,
+                new Object[]{});
+    }
+
+    public void createAgent(ContainerController containerController, String agentClassName) throws StaleProxyException {
+        this.agentController = containerController.createNewAgent(this.name, agentClassName,
                 new Object[]{});
     }
 

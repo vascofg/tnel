@@ -66,8 +66,8 @@ public class Product {
         this.attributes = attributes;
     }
 
-    public void addAttribute(Attribute attribute) {
-        this.attributes.add(attribute);
+    public boolean addAttribute(Attribute attribute) {
+        return this.attributes.add(attribute);
     }
 
 }

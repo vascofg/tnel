@@ -12,12 +12,13 @@ public class Buyer extends Participant {
 
     @XmlAttribute(name = "buyerProperty")
     String buyerProperty = "buyer test!";
+    public static final String agentClassName = BuyerAgent.class.getName();
 
     public Buyer() {
     }
 
     public Buyer(String name, ContainerController containerController) throws StaleProxyException {
-        super(name, containerController, BuyerAgent.class);
+        super(name, containerController, agentClassName);
     }
 
     public String getBuyerProperty() {

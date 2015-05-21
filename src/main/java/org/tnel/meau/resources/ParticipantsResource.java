@@ -2,6 +2,7 @@ package org.tnel.meau.resources;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import jade.wrapper.StaleProxyException;
 import org.tnel.meau.Meau;
 import org.tnel.meau.participants.Buyer;
 import org.tnel.meau.participants.Participant;
@@ -35,8 +36,17 @@ public class ParticipantsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Insert a buyer")
     public Buyer addBuyer(Buyer buyer) {
-        Meau.getParticipants().add(buyer);
-        return buyer;
+        try {
+            if(Meau.getParticipants().add(buyer)) {
+                buyer.createAgent(Meau.mainContainer, Buyer.agentClassName);
+                return buyer;
+            }
+            else
+                throw new InternalServerErrorException();
+        } catch (StaleProxyException e) {
+            Meau.getParticipants().remove(buyer);
+            throw new InternalServerErrorException();
+        }
     }
 
     @POST
@@ -44,8 +54,17 @@ public class ParticipantsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Insert a seller")
     public Seller addSeller(Seller seller) {
-        Meau.getParticipants().add(seller);
-        return seller;
+        try {
+            if(Meau.getParticipants().add(seller)) {
+                seller.createAgent(Meau.mainContainer, Seller.agentClassName);
+                return seller;
+            }
+            else
+                throw new InternalServerErrorException();
+        } catch (StaleProxyException e) {
+            Meau.getParticipants().remove(seller);
+            throw new InternalServerErrorException();
+        }
     }
 
 
