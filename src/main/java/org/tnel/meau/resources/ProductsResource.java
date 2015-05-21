@@ -20,7 +20,7 @@ public class ProductsResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @ApiOperation(value = "Get all products")
     public List<Product> getProducts() {
-        return Meau.products;
+        return Meau.getProducts();
     }
 
     @Path("/{index}")
@@ -28,14 +28,14 @@ public class ProductsResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @ApiOperation(value = "Get product by index")
     public Product getProduct(@PathParam("index") int index) {
-        return Meau.products.get(index);
+        return Meau.getProducts().get(index);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Insert a product")
     public Product addProduct(Product product) {
-        Meau.products.add(product);
+        Meau.getProducts().add(product);
         return product;
     }
 
@@ -44,7 +44,7 @@ public class ProductsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Add a boolean attribute to a product")
     public Product addBooleanAttribute(@PathParam("index") int index, BooleanAttribute attribute) {
-        Product product = Meau.products.get(index);
+        Product product = Meau.getProducts().get(index);
         product.addAttribute(attribute);
         return product;
     }
@@ -54,7 +54,7 @@ public class ProductsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Add a descriptive attribute to a product")
     public Product addDescriptiveAttribute(@PathParam("index") int index, DescriptiveAttribute attribute) {
-        Product product = Meau.products.get(index);
+        Product product = Meau.getProducts().get(index);
         product.addAttribute(attribute);
         return product;
     }
@@ -64,7 +64,7 @@ public class ProductsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Add a numeric attribute to a product")
     public Product addNumericAttribute(@PathParam("index") int index, NumericAttribute attribute) {
-        Product product = Meau.products.get(index);
+        Product product = Meau.getProducts().get(index);
         product.addAttribute(attribute);
         return product;
     }

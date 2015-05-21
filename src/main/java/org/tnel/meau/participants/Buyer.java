@@ -1,13 +1,32 @@
 package org.tnel.meau.participants;
 
-import org.tnel.meau.items.Attribute;
-import org.tnel.meau.items.Product;
+import jade.wrapper.ContainerController;
+import jade.wrapper.StaleProxyException;
+import org.tnel.meau.agents.BuyerAgent;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class Buyer {
+@XmlRootElement
+public class Buyer extends Participant {
+
+    @XmlAttribute
+    String buyerProperty = "buyer test!";
+
+    public Buyer() {
+    }
+
+    public Buyer(String name, ContainerController containerController) throws StaleProxyException {
+        super(name, containerController, BuyerAgent.class);
+    }
+
+    public String getBuyerProperty() {
+        return buyerProperty;
+    }
+
+    public void setBuyerProperty(String buyerProperty) {
+        this.buyerProperty = buyerProperty;
+    }
 
     /*List<Attribute> attributePreferences;
     List<Integer> productValue;
@@ -18,7 +37,7 @@ public class Buyer {
         this.maxBuyPrice = maxBuyPrice;
         this.category = category;
         attributePreferences = new LinkedList<>();
-        setAttributePreferences(category.getAttributeList());
+        setAttributePreferences(category.getAttributes());
     }
 
     void setAttributePreferences(List<Attribute> productAtrributes) {

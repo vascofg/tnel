@@ -23,7 +23,7 @@ public class Product {
             @XmlElement(name = "boolean", type = BooleanAttribute.class),
             @XmlElement(name = "descriptive", type = DescriptiveAttribute.class),
             @XmlElement(name = "numeric", type = NumericAttribute.class)})
-    protected List<Attribute> attributeList = new LinkedList<>();
+    protected List<Attribute> attributes = new LinkedList<>();
 
     public Product() {
     }
@@ -58,12 +58,16 @@ public class Product {
         this.price = price;
     }
 
-    public List<Attribute> getAttributeList() {
-        return attributeList;
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
     public void addAttribute(Attribute attribute) {
-        this.attributeList.add(attribute);
+        this.attributes.add(attribute);
     }
 
 }
