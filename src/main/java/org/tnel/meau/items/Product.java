@@ -17,6 +17,8 @@ public class Product {
     protected String description;
     @XmlElement(required = true)
     protected int price;
+    @XmlElement(required = true)
+    protected String category;
 
     @XmlElementWrapper(name = "attributes")
     @XmlElements({
@@ -28,10 +30,19 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, int price) {
+    public Product(String name, String description, int price, String category) {
         this.name = name;
         this.description = description;
         this.price = price;
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getName() {

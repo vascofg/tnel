@@ -4,14 +4,10 @@ import jade.core.Profile;
 import jade.core.ProfileImpl;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.tnel.meau.items.BooleanAttribute;
-import org.tnel.meau.items.DescriptiveAttribute;
-import org.tnel.meau.items.NumericAttribute;
-import org.tnel.meau.items.Product;
-import org.tnel.meau.participants.Buyer;
-import org.tnel.meau.participants.Participant;
+import org.tnel.meau.items.*;
 import org.tnel.meau.participants.Seller;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +18,7 @@ import java.util.List;
 public class Meau {
 
     private static List<Product> products = new LinkedList<>();
-    private static List<Participant> participants = new LinkedList<>();
+    private static List<Seller> sellers = new LinkedList<>();
     public static jade.wrapper.AgentContainer mainContainer = null;
 
 
@@ -30,9 +26,8 @@ public class Meau {
         return products;
     }
 
-
-    public static List<Participant> getParticipants() {
-        return participants;
+    public static List<Seller> getSellers() {
+        return sellers;
     }
 
     public static void main(String[] args) throws Exception {
@@ -84,8 +79,8 @@ public class Meau {
         rma.start(); */
 
         // Add sample data
-        products.add(new Product("Batatas vermelhas", "Batatas ideais para fritar", 20));
-        products.add(new Product("Batatas brancas", "Batatas ideais para cozer", 18));
+        products.add(new Product("Batatas vermelhas", "Batatas ideais para fritar", 20, "batatas"));
+        products.add(new Product("Batatas brancas", "Batatas ideais para cozer", 18, "batatas"));
 
         products.get(0).addAttribute(new BooleanAttribute("descascadas", true));
         products.get(0).addAttribute(new NumericAttribute("peso", 1.5f));
@@ -93,8 +88,15 @@ public class Meau {
         products.get(1).addAttribute(new NumericAttribute("peso", 2.25f));
         products.get(1).addAttribute(new DescriptiveAttribute("cor", "branco"));
 
-        participants.add(new Buyer("Buyer 1", mainContainer));
-        participants.add(new Seller("Seller 1", mainContainer));
+        String category = products.get(0).getCategory();
+        HashMap<Attribute, Integer> attributes = new HashMap<>();
+        attributes.put(products.get(0).getAttributes().get(0), 10);
+        attributes.put(products.get(0).getAttributes().get(1), 90);
+
+        /*Buyer b1 = new Buyer("Buyer 1", mainContainer);
+        b1.setParameters(50, category, attributes);
+        participants.add(b1);*/
+        sellers.add(new Seller("REI DAS BATATAS", products.get(0)));
 
 
         // Start server
