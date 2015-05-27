@@ -2,8 +2,10 @@ package org.tnel.meau;
 
 import jade.core.Profile;
 import jade.core.ProfileImpl;
+import jade.wrapper.AgentController;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.tnel.meau.agents.BuyerAgent;
 import org.tnel.meau.items.*;
 import org.tnel.meau.participants.Seller;
 
@@ -69,14 +71,14 @@ public class Meau {
         mainContainer = rt.createMainContainer(profile);
 
         // now set the default Profile to start a container
-        /*ProfileImpl pContainer = new ProfileImpl(null, 1200, null);
+        ProfileImpl pContainer = new ProfileImpl(null, 1200, null);
 
-        jade.wrapper.AgentContainer cont = rt.createAgentContainer(pContainer);
+       // jade.wrapper.AgentContainer cont = rt.createAgentContainer(pContainer);
 
         System.out.println("[JADE]Launching the rma agent on the main container ...");
         AgentController rma = mainContainer.createNewAgent("rma",
                 "jade.tools.rma.rma", new Object[0]);
-        rma.start(); */
+        rma.start();
 
         // Add sample data
         products.add(new Product("Batatas vermelhas", "Batatas ideais para fritar", 20, "batatas"));
@@ -98,6 +100,7 @@ public class Meau {
         participants.add(b1);*/
         sellers.add(new Seller("REI DAS BATATAS", products.get(0)));
 
+        mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "batatas", attributes)).start();
 
         // Start server
         server.start();
