@@ -1,21 +1,23 @@
 package org.tnel.meau.agents;
 
+import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import org.tnel.meau.items.Attribute;
-import org.tnel.meau.items.BooleanAttribute;
-import org.tnel.meau.items.DescriptiveAttribute;
-import org.tnel.meau.items.NumericAttribute;
+import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+import org.tnel.meau.Meau;
+import org.tnel.meau.items.*;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -108,18 +110,64 @@ public class BuyerAgent extends Agent {
 
 
         //enviar mensagem para sellers com categoria de produto de interesse
-        addBehaviour(new CyclicBehaviour(this) {
+        ACLMessage message = new ACLMessage(ACLMessage.CFP);
+        message.setContent(category);
 
+        for (int i = 0; i < sellers.size(); i++)
+            message.addReceiver(sellers.get(i).getName());
+
+        send(message);
+
+        final MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
+
+        // Receber propostas de negocio
+        addBehaviour(new SimpleBehaviour() {
+
+            AID bestOfferAgent;
+            float bestOffer;
+
+            private void calculateValue(String messageContent) {
+                ArrayList<Attribute> matchingAttributes = new ArrayList<Attribute>();
+                int productId = Integer.parseInt(messageContent);
+
+                Product product = Meau.getProductById(productId);
+
+                ArrayList<Attribute> attributes = new ArrayList<>(product.getAttributes());
+
+                for (int i = 0; i < attributes.size(); i++) {
+                    //if (attributePreferences.containsKey(attributes.get(i)))
+
+
+                }
+
+
+            }
             @Override
             public void action() {
-                ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-                message.setContent(category);
+                ACLMessage msg;
+               // ArrayList<AID> sellerAgents = new ArrayList<>();
 
-                for (int i = 0; i < sellers.size(); i++)
-                    message.addReceiver(sellers.get(i).getName());
+                for (int i = 0; i < sellers.size(); i++) {
+                    msg = receive(mt);
 
-                send(message);
+                    /*if (!sellerAgents.contains(msg.getSender()))
+                        sellerAgents.add(msg.getSender());*/
+
+                    if (msg != null) {
+                        System.out.println("recebida proposta " + msg.getContent());
+                        calculateValue(msg.getContent());
+                    }
+                    else
+                        block();
+                }
+            }
+
+            @Override
+            public boolean done() {
+                return false;
             }
         });
+            //}
+        //});
     }
 }

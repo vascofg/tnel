@@ -22,6 +22,8 @@ public abstract class Attribute implements Comparable<Attribute> {
 
     abstract void setValue(Object value);
 
+    abstract String getType();
+
     public Attribute() {
     }
 

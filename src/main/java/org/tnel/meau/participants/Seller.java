@@ -24,9 +24,15 @@ public class Seller {
     public Seller() {
     }
 
-    public Seller(String name, Product product) {
+    public Seller(String name, Product product, ContainerController containerController) {
         this.name = name;
         this.product = product;
+        try {
+            this.agentController = containerController.createNewAgent(this.name, SellerAgent.class.getName(), new Object[] {this});
+            this.agentController.start();
+        } catch (StaleProxyException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createAgent(ContainerController containerController) throws StaleProxyException {

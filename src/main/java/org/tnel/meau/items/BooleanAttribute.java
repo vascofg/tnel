@@ -20,6 +20,11 @@ public class BooleanAttribute extends Attribute {
     }
 
     @Override
+    String getType() {
+        return "boolean";
+    }
+
+    @Override
     public int compareTo(Attribute other) {
         return this.value.compareTo((Boolean) other.getValue());
     }

@@ -11,6 +11,8 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Product {
 
+    private static int NEXT_ID = 1;
+
     @XmlElement(required = true)
     protected String name;
     @XmlElement(required = true)
@@ -20,6 +22,8 @@ public class Product {
     @XmlElement(required = true)
     protected String category;
 
+    protected int id;
+
     @XmlElementWrapper(name = "attributes")
     @XmlElements({
             @XmlElement(name = "boolean", type = BooleanAttribute.class),
@@ -28,6 +32,7 @@ public class Product {
     protected List<Attribute> attributes = new LinkedList<>();
 
     public Product() {
+        this.id = NEXT_ID++;
     }
 
     public Product(String name, String description, int price, String category) {
@@ -35,6 +40,7 @@ public class Product {
         this.description = description;
         this.price = price;
         this.category = category;
+        this.id = NEXT_ID++;
     }
 
     public String getCategory() {
@@ -81,4 +87,16 @@ public class Product {
         return this.attributes.add(attribute);
     }
 
+    public String getProductInfo() {
+        String info = price+"";
+
+        for (int i = 0; i < attributes.size(); i++)
+            info += " " + attributes.get(i).getType() + " " + attributes.get(i).getName() + " " + attributes.get(i).getValue();
+
+        return info;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

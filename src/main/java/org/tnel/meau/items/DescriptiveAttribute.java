@@ -20,6 +20,11 @@ public class DescriptiveAttribute extends Attribute {
     }
 
     @Override
+    String getType() {
+        return "descriptive";
+    }
+
+    @Override
     public int compareTo(Attribute other) {
         return this.value.compareTo((String) other.getValue());
     }

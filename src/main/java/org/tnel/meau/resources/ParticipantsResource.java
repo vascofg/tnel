@@ -2,7 +2,6 @@ package org.tnel.meau.resources;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import jade.wrapper.StaleProxyException;
 import org.tnel.meau.Meau;
 import org.tnel.meau.participants.Seller;
 

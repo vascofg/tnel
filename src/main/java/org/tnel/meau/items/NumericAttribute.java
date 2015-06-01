@@ -20,6 +20,11 @@ public class NumericAttribute extends Attribute {
     }
 
     @Override
+    String getType() {
+        return "numeric";
+    }
+
+    @Override
     public int compareTo(Attribute other) {
         return this.value.compareTo((Float) other.getValue());
     }

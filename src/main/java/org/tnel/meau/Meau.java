@@ -32,6 +32,14 @@ public class Meau {
         return sellers;
     }
 
+    public static Product getProductById(int id) {
+        for (int i = 0; i < getProducts().size(); i++)
+            if (getProducts().get(i).getId() == id)
+                return getProducts().get(i);
+
+        return null;
+    }
+
     public static void main(String[] args) throws Exception {
         // The port that we should run on can be set into an environment variable
         // Look for that variable and default to 8080 if it isn't there.
@@ -98,7 +106,7 @@ public class Meau {
         /*Buyer b1 = new Buyer("Buyer 1", mainContainer);
         b1.setParameters(50, category, attributes);
         participants.add(b1);*/
-        sellers.add(new Seller("REI DAS BATATAS", products.get(0)));
+        sellers.add(new Seller("REI DAS BATATAS", products.get(0), mainContainer));
 
         mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "batatas", attributes)).start();
 
