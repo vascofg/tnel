@@ -21,12 +21,16 @@ public class Seller {
 
     protected Product product;
 
+    float decrement, minPrice;
+
     public Seller() {
     }
 
-    public Seller(String name, Product product, ContainerController containerController) {
+    public Seller(String name, Product product, ContainerController containerController, float decrement, float minPrice) {
         this.name = name;
         this.product = product;
+        this.decrement = decrement;
+        this.minPrice = minPrice;
         try {
             this.agentController = containerController.createNewAgent(this.name, SellerAgent.class.getName(), new Object[] {this});
             this.agentController.start();
@@ -54,5 +58,13 @@ public class Seller {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public float getDecrement() {
+        return decrement;
+    }
+
+    public float getMinPrice() {
+        return minPrice;
     }
 }

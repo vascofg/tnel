@@ -92,23 +92,10 @@ public class Meau {
         products.add(new Product("Batatas vermelhas", "Batatas ideais para fritar", 20, "batatas"));
         products.add(new Product("Batatas brancas", "Batatas ideais para cozer", 18, "batatas"));
 
-        products.get(0).addAttribute(new BooleanAttribute("descascadas", true));
-        products.get(0).addAttribute(new NumericAttribute("peso", 1.5f));
-        products.get(0).addAttribute(new DescriptiveAttribute("cor", "vermelho"));
-        products.get(1).addAttribute(new NumericAttribute("peso", 2.25f));
-        products.get(1).addAttribute(new DescriptiveAttribute("cor", "branco"));
+        sellers.add(new Seller("REI DAS BATATAS", products.get(0), mainContainer, 2, 18));
+        sellers.add(new Seller("VASCO BATATAS NO CU", products.get(1), mainContainer, 1, 7));
 
-        String category = products.get(0).getCategory();
-        HashMap<Attribute, Integer> attributes = new HashMap<>();
-        attributes.put(products.get(0).getAttributes().get(0), 10);
-        attributes.put(products.get(0).getAttributes().get(1), 90);
-
-        /*Buyer b1 = new Buyer("Buyer 1", mainContainer);
-        b1.setParameters(50, category, attributes);
-        participants.add(b1);*/
-        sellers.add(new Seller("REI DAS BATATAS", products.get(0), mainContainer));
-
-        mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "batatas", attributes)).start();
+        mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "batatas")).start();
 
         // Start server
         server.start();

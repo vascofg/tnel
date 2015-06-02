@@ -24,34 +24,20 @@ import java.util.HashMap;
 
 public class BuyerAgent extends Agent {
 
-    @XmlElementWrapper(name = "attributePreferences")
-    @XmlElements({
-            @XmlElement(name = "boolean", type = BooleanAttribute.class),
-            @XmlElement(name = "descriptive", type = DescriptiveAttribute.class),
-            @XmlElement(name = "numeric", type = NumericAttribute.class)})
-    private HashMap<Attribute,Integer> attributePreferences;
-
     @XmlAttribute(name = "category")
     String category;
 
     @XmlAttribute(name = "maxBuyPrice")
     float maxBuyPrice;
 
-    //float minProductUtility;
-
     public static final String agentClassName = BuyerAgent.class.getName();
 
     public BuyerAgent() {
     }
 
-    public BuyerAgent(float maxBuyPrice, String category, HashMap<Attribute,Integer> attributePreferences) {
+    public BuyerAgent(float maxBuyPrice, String category) {
         this.maxBuyPrice = maxBuyPrice;
         this.category = category;
-        this.attributePreferences = new HashMap<>(attributePreferences);
-    }
-
-    public HashMap<Attribute, Integer> getAttributePreferences() {
-        return attributePreferences;
     }
 
     public String getCategory() {
@@ -68,10 +54,6 @@ public class BuyerAgent extends Agent {
 
     public void setMaxBuyPrice(float maxBuyPrice) {
         this.maxBuyPrice = maxBuyPrice;
-    }
-
-    public void setAttributePreferences(HashMap<Attribute, Integer> attributePreferences) {
-        this.attributePreferences = attributePreferences;
     }
 
     @Override
@@ -108,7 +90,6 @@ public class BuyerAgent extends Agent {
 
         final ArrayList<DFAgentDescription> sellers = new ArrayList<>(sellersDFAD);
 
-
         //enviar mensagem para sellers com categoria de produto de interesse
         ACLMessage message = new ACLMessage(ACLMessage.CFP);
         message.setContent(category);
@@ -117,57 +98,110 @@ public class BuyerAgent extends Agent {
             message.addReceiver(sellers.get(i).getName());
 
         send(message);
-
-        final MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
+        System.out.println("Enviado primeiro CFP");
 
         // Receber propostas de negocio
         addBehaviour(new SimpleBehaviour() {
 
             AID bestOfferAgent;
-            float bestOffer;
+            ArrayList<AID> sellerAgents = new ArrayList<>();
+            float bestOffer = -1;
+            int numberOfSellers = 0, numberOfRounds = 0;
 
-            private void calculateValue(String messageContent) {
-                ArrayList<Attribute> matchingAttributes = new ArrayList<Attribute>();
-                int productId = Integer.parseInt(messageContent);
+            ACLMessage msg;
 
-                Product product = Meau.getProductById(productId);
-
-                ArrayList<Attribute> attributes = new ArrayList<>(product.getAttributes());
-
-                for (int i = 0; i < attributes.size(); i++) {
-                    //if (attributePreferences.containsKey(attributes.get(i)))
-
-
-                }
-
-
-            }
             @Override
             public void action() {
-                ACLMessage msg;
-               // ArrayList<AID> sellerAgents = new ArrayList<>();
-
-                for (int i = 0; i < sellers.size(); i++) {
-                    msg = receive(mt);
-
-                    /*if (!sellerAgents.contains(msg.getSender()))
-                        sellerAgents.add(msg.getSender());*/
-
-                    if (msg != null) {
-                        System.out.println("recebida proposta " + msg.getContent());
-                        calculateValue(msg.getContent());
+                msg = receive();
+                if (msg != null) {
+                    switch (msg.getPerformative()) {
+                        case ACLMessage.PROPOSE:
+                            System.out.println("recebida proposta " + msg.getContent());
+                            sellerAgents.add(msg.getSender());
+                            numberOfSellers++;
+                            calculateValue(msg.getContent(), msg.getSender());
+                            break;
+                        case ACLMessage.INFORM:
+                            sellers.remove(sellers.size()-1);
+                            System.out.println("recebido inform para sair. N de vendedores atual: " + sellers.size());
                     }
-                    else
-                        block();
                 }
+                else
+                    block();
             }
 
             @Override
             public boolean done() {
+                // Se ja tiver recebido propostas de todos os sellers, entao responde
+                if (numberOfSellers == sellers.size() && msg != null) {
+                    ACLMessage accept = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                    ACLMessage reject = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
+
+                    accept.setContent("accepted");
+                    accept.addReceiver(bestOfferAgent);
+                    send(accept);
+
+                    reject.setContent("rejected");
+                    for (int i = 0; i < sellerAgents.size(); i++)
+                        if (!sellerAgents.get(i).equals(bestOfferAgent))
+                            reject.addReceiver(sellerAgents.get(i));
+
+                    send(reject);
+                    numberOfRounds++;
+
+                    //Wait for sellers to adjust their proposals
+                    try {
+                        Thread.sleep(500);
+                        System.out.println("---Waiting---");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Verificar fim de leilao
+                    if (numberOfRounds == 5 || sellers.size() == 1){
+                        ACLMessage bestOffer = new ACLMessage(ACLMessage.INFORM);
+                        bestOffer.setContent("deal");
+                        bestOffer.addReceiver(bestOfferAgent);
+                        send(bestOffer);
+
+                        ACLMessage otherOffers = new ACLMessage(ACLMessage.INFORM);
+                        otherOffers.setContent("over");
+
+                        for (int i = 0; i < sellerAgents.size(); i++)
+                            if (!sellerAgents.get(i).equals(bestOfferAgent))
+                                otherOffers.addReceiver(sellerAgents.get(i));
+                        send(otherOffers);
+
+                        return true;
+                    }
+                    else if (numberOfRounds < 5) {
+                        // Envia novo CFP
+                        ACLMessage message = new ACLMessage(ACLMessage.CFP);
+                        message.setContent(category);
+
+                        for (int i = 0; i < sellers.size(); i++)
+                            message.addReceiver(sellerAgents.get(i));
+
+                        System.out.println("Enviado CFP");
+                        send(message);
+                        sellerAgents = new ArrayList<>();
+                        numberOfSellers = 0;
+                    }
+                }
                 return false;
             }
+
+            private void calculateValue(String messageContent, AID agentSender) {
+                Product product = Meau.getProductById(Integer.parseInt(messageContent));
+                float price = product.getPrice();
+                System.out.println("Preco da proposta: " + price);
+
+                //Se o preco da proposta for mais baixo que o melhor atual, atualiza
+                if (price < bestOffer || bestOffer == -1) {
+                    bestOffer = price;
+                    bestOfferAgent = agentSender;
+                }
+            }
         });
-            //}
-        //});
     }
 }

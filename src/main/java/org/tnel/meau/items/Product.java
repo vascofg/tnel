@@ -18,24 +18,17 @@ public class Product {
     @XmlElement(required = true)
     protected String description;
     @XmlElement(required = true)
-    protected int price;
+    protected float price;
     @XmlElement(required = true)
     protected String category;
 
     protected int id;
 
-    @XmlElementWrapper(name = "attributes")
-    @XmlElements({
-            @XmlElement(name = "boolean", type = BooleanAttribute.class),
-            @XmlElement(name = "descriptive", type = DescriptiveAttribute.class),
-            @XmlElement(name = "numeric", type = NumericAttribute.class)})
-    protected List<Attribute> attributes = new LinkedList<>();
-
     public Product() {
         this.id = NEXT_ID++;
     }
 
-    public Product(String name, String description, int price, String category) {
+    public Product(String name, String description, float price, String category) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -67,33 +60,12 @@ public class Product {
         this.description = description;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(float price) {
         this.price = price;
-    }
-
-    public List<Attribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(List<Attribute> attributes) {
-        this.attributes = attributes;
-    }
-
-    public boolean addAttribute(Attribute attribute) {
-        return this.attributes.add(attribute);
-    }
-
-    public String getProductInfo() {
-        String info = price+"";
-
-        for (int i = 0; i < attributes.size(); i++)
-            info += " " + attributes.get(i).getType() + " " + attributes.get(i).getName() + " " + attributes.get(i).getValue();
-
-        return info;
     }
 
     public int getId() {

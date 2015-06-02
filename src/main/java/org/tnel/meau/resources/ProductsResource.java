@@ -3,16 +3,13 @@ package org.tnel.meau.resources;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.tnel.meau.Meau;
-import org.tnel.meau.items.BooleanAttribute;
-import org.tnel.meau.items.DescriptiveAttribute;
-import org.tnel.meau.items.NumericAttribute;
 import org.tnel.meau.items.Product;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-
+/*
 @Path("/products")
 @Api(value = "/products", description = "Operations on products")
 public class ProductsResource {
@@ -97,4 +94,4 @@ public class ProductsResource {
                     build());
     }
 
-}
+}*/
