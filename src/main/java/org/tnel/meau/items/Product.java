@@ -101,4 +101,11 @@ public class Product {
                 "Category: " + this.category + '\n' +
                 "------------------";
     }
+
+    public static boolean isValid(Product product) {
+        return (product.getName() != null && !product.getName().isEmpty() &&
+                product.getDescription() != null && !product.getDescription().isEmpty() &&
+                product.getCategory() != null && !product.getCategory().isEmpty() &&
+                product.getPrice() > 0 && product.getId() > 0);
+    }
 }

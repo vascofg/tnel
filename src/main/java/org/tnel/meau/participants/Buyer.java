@@ -113,4 +113,10 @@ public class Buyer {
                 "Max rounds: " + this.maxrounds + '\n' +
                 "------------------";
     }
+
+    public static boolean isValid(Buyer buyer) {
+        return (buyer.getMaxrounds() > 0 && buyer.getCategory() != null &&
+                !buyer.getCategory().isEmpty() && buyer.getName() != null &&
+                !buyer.getName().isEmpty());
+    }
 }

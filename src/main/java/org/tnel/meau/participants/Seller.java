@@ -96,4 +96,10 @@ public class Seller {
                 "Minimum price: " + this.minPrice + '\n' +
                 "------------------";
     }
+
+    public static boolean isValid(Seller seller) {
+        return (seller.getName() != null && !seller.getName().isEmpty() &&
+                Product.isValid(seller.getProduct()) &&
+                seller.decrement > 0 && seller.minPrice > 0);
+    }
 }

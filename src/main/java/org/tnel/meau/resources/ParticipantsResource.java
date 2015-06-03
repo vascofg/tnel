@@ -47,6 +47,12 @@ public class ParticipantsResource {
     @ApiOperation(value = "Insert a buyer and start the auction")
     public Product addBuyer(Buyer buyer) {
         try {
+            if (!Buyer.isValid(buyer)) {
+                System.out.println("[400] Invalid paramter");
+                throw new CustomWebApplicationException(Response.Status.BAD_REQUEST,
+                        "Invalid paramter");
+            }
+
             if (Meau.auctionRunning) {
                 System.out.println("[500] Auction already running");
                 throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
@@ -124,6 +130,11 @@ public class ParticipantsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Insert a seller")
     public Seller addSeller(Seller seller) {
+        if (!Seller.isValid(seller)) {
+            System.out.println("[400] Invalid paramter");
+            throw new CustomWebApplicationException(Response.Status.BAD_REQUEST,
+                    "Invalid paramter");
+        }
         if (Meau.getSellers().add(seller)) {
             try {
                 seller.createAgent(Meau.mainContainer);
