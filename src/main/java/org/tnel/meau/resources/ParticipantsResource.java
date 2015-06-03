@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import jade.core.Agent;
 import jade.wrapper.StaleProxyException;
 import org.tnel.meau.Meau;
+import org.tnel.meau.exceptions.CustomWebApplicationException;
 import org.tnel.meau.items.Product;
 import org.tnel.meau.participants.Buyer;
 import org.tnel.meau.participants.Seller;
@@ -35,22 +36,21 @@ public class ParticipantsResource {
             return Meau.getSellers().get(index);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("[400] Element not found");
-            throw new WebApplicationException(Response.status(
-                    Response.Status.BAD_REQUEST).
-                    entity("Element not found").
-                    build());
+            throw new CustomWebApplicationException(Response.Status.NOT_FOUND,
+                    "Element not found");
         }
     }
 
     @POST
-    @Path("/buyer")
+    @Path("/buyers")
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Insert a buyer and start the auction")
     public Product addBuyer(Buyer buyer) {
         try {
             if (Meau.auctionRunning) {
-                System.out.println("[ERROR] Auction already running");
-                throw new Exception();
+                System.out.println("[500] Auction already running");
+                throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
+                        "Auction already running");
             }
 
             Meau.auctionRunning = true;
@@ -68,8 +68,9 @@ public class ParticipantsResource {
             }
 
             if (startedSellers == 0) {
-                System.out.println("[ERROR] No agents for that category");
-                throw new Exception();
+                System.out.println("[500] No agents for that category");
+                throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
+                        "No agents for that category");
             }
 
             /* START BUYER */
@@ -84,21 +85,11 @@ public class ParticipantsResource {
                 //auction timeout
                 notifier.wait(10000);
             }
-        } catch (StaleProxyException e) {
-            System.out.println("[ERROR] Error creating buyer agent");
-            throw new Exception();
-        } catch (InterruptedException e) {
-            System.out.println("[ERROR] Auction interrupted");
-            throw new Exception();
-        } finally {
-            Meau.auctionRunning = false;
 
             if (buyer.getBestOfferSeller() == null) {
                 System.out.println("[500] Auction unsuccessful");
-                throw new WebApplicationException(Response.status(
-                        Response.Status.INTERNAL_SERVER_ERROR).
-                        entity("Auction unsuccessful").
-                        build());
+                throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
+                        "Auction unsuccessful");
             }
 
             Seller wonSeller = buyer.getBestOfferSeller();
@@ -106,14 +97,25 @@ public class ParticipantsResource {
             Product wonProduct = new Product(wonSeller.getProduct());
             //reset product price
             wonSeller.getProduct().reset();
-            //kill agent
-            try {
-                buyer.getAgentController().kill();
-            } catch (StaleProxyException e) {
-                e.printStackTrace();
-            }
+
+            buyer.getAgentController().kill();
 
             return wonProduct;
+        } catch (StaleProxyException e) {
+            System.out.println("[500] JADE error");
+            throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
+                    "JADE error");
+        } catch (InterruptedException e) {
+            System.out.println("[500] Auction interrupted");
+            throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
+                    "Auction interrupted");
+        } catch (IllegalArgumentException e) {
+            System.out.println("[400] Illegal argument");
+            throw new CustomWebApplicationException(Response.Status.BAD_REQUEST,
+                    e.getMessage());
+        }
+        finally {
+            Meau.auctionRunning = false;
         }
     }
 
@@ -127,18 +129,15 @@ public class ParticipantsResource {
                 seller.createAgent(Meau.mainContainer);
                 return seller;
             } catch (StaleProxyException e) {
+                Meau.getSellers().remove(seller);
                 System.out.println("[500] Error creating agent");
-                throw new WebApplicationException(Response.status(
-                        Response.Status.INTERNAL_SERVER_ERROR).
-                        entity("Error creating agent").
-                        build());
+                throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
+                        "Error creating agent");
             }
         } else
             System.out.println("[500] Error adding element");
-        throw new WebApplicationException(Response.status(
-                Response.Status.INTERNAL_SERVER_ERROR).
-                entity("Error adding element").
-                build());
+        throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
+                "Error adding element");
     }
 
 
