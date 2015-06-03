@@ -8,52 +8,19 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 import org.tnel.meau.Meau;
-import org.tnel.meau.items.*;
+import org.tnel.meau.items.Product;
+import org.tnel.meau.participants.Buyer;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class BuyerAgent extends Agent {
 
-    @XmlAttribute(name = "category")
-    String category;
+    private Buyer buyer;
 
-    @XmlAttribute(name = "maxBuyPrice")
-    float maxBuyPrice;
-
-    public static final String agentClassName = BuyerAgent.class.getName();
-
-    public BuyerAgent() {
-    }
-
-    public BuyerAgent(float maxBuyPrice, String category) {
-        this.maxBuyPrice = maxBuyPrice;
-        this.category = category;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public float getMaxBuyPrice() {
-        return maxBuyPrice;
-    }
-
-    public void setMaxBuyPrice(float maxBuyPrice) {
-        this.maxBuyPrice = maxBuyPrice;
+    public BuyerAgent(Buyer buyer) {
+        this.buyer = buyer;
     }
 
     @Override
@@ -92,7 +59,7 @@ public class BuyerAgent extends Agent {
 
         //enviar mensagem para sellers com categoria de produto de interesse
         ACLMessage message = new ACLMessage(ACLMessage.CFP);
-        message.setContent(category);
+        message.setContent(buyer.getCategory());
 
         for (int i = 0; i < sellers.size(); i++)
             message.addReceiver(sellers.get(i).getName());
@@ -104,8 +71,8 @@ public class BuyerAgent extends Agent {
         addBehaviour(new SimpleBehaviour() {
 
             AID bestOfferAgent;
-            ArrayList<AID> sellerAgents = new ArrayList<>();
             float bestOffer = -1;
+            ArrayList<AID> sellerAgents = new ArrayList<>();
             int numberOfSellers = 0, numberOfRounds = 0;
 
             ACLMessage msg;
@@ -122,11 +89,10 @@ public class BuyerAgent extends Agent {
                             calculateValue(msg.getContent(), msg.getSender());
                             break;
                         case ACLMessage.INFORM:
-                            sellers.remove(sellers.size()-1);
+                            sellers.remove(sellers.size() - 1);
                             System.out.println("recebido inform para sair. N de vendedores atual: " + sellers.size());
                     }
-                }
-                else
+                } else
                     block();
             }
 
@@ -158,11 +124,11 @@ public class BuyerAgent extends Agent {
                     }
 
                     //Verificar fim de leilao
-                    if (numberOfRounds == 5 || sellers.size() == 1){
-                        ACLMessage bestOffer = new ACLMessage(ACLMessage.INFORM);
-                        bestOffer.setContent("deal");
-                        bestOffer.addReceiver(bestOfferAgent);
-                        send(bestOffer);
+                    if (numberOfRounds == buyer.getMaxrounds() || sellers.size() == 1) {
+                        ACLMessage bestOfferMsg = new ACLMessage(ACLMessage.INFORM);
+                        bestOfferMsg.setContent("deal");
+                        bestOfferMsg.addReceiver(bestOfferAgent);
+                        send(bestOfferMsg);
 
                         ACLMessage otherOffers = new ACLMessage(ACLMessage.INFORM);
                         otherOffers.setContent("over");
@@ -171,13 +137,16 @@ public class BuyerAgent extends Agent {
                             if (!sellerAgents.get(i).equals(bestOfferAgent))
                                 otherOffers.addReceiver(sellerAgents.get(i));
                         send(otherOffers);
-
+                        System.out.println("WINNING AGENT NAME: " + bestOfferAgent.getLocalName());
+                        buyer.setBestOfferSeller(Meau.getSellerByAgentName(bestOfferAgent.getLocalName()));
+                        synchronized (buyer.getDoneNotifier()) {
+                            buyer.getDoneNotifier().notify();
+                        }
                         return true;
-                    }
-                    else if (numberOfRounds < 5) {
+                    } else if (numberOfRounds < buyer.getMaxrounds()) {
                         // Envia novo CFP
                         ACLMessage message = new ACLMessage(ACLMessage.CFP);
-                        message.setContent(category);
+                        message.setContent(buyer.getCategory());
 
                         for (int i = 0; i < sellers.size(); i++)
                             message.addReceiver(sellerAgents.get(i));
@@ -203,5 +172,15 @@ public class BuyerAgent extends Agent {
                 }
             }
         });
+    }
+
+    @Override
+    protected void takeDown() {
+        try {
+            DFService.deregister(this);
+        } catch (FIPAException e) {
+            e.printStackTrace();
+        }
+        super.takeDown();
     }
 }

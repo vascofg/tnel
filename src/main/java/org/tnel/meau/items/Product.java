@@ -3,8 +3,6 @@ package org.tnel.meau.items;
 import com.wordnik.swagger.annotations.ApiModel;
 
 import javax.xml.bind.annotation.*;
-import java.util.LinkedList;
-import java.util.List;
 
 @XmlRootElement(name = "product")
 @ApiModel(value = "Product", description = "Product model")
@@ -22,6 +20,9 @@ public class Product {
     @XmlElement(required = true)
     protected String category;
 
+    @XmlTransient
+    protected Float initialPrice;
+
     protected int id;
 
     public Product() {
@@ -34,6 +35,17 @@ public class Product {
         this.price = price;
         this.category = category;
         this.id = NEXT_ID++;
+        this.initialPrice = price;
+    }
+
+    //clone constructor
+    public Product(Product other) {
+        this.name = other.name;
+        this.description = other.description;
+        this.price = other.price;
+        this.category = other.category;
+        this.id = other.id;
+        this.initialPrice = other.price;
     }
 
     public String getCategory() {
@@ -65,10 +77,28 @@ public class Product {
     }
 
     public void setPrice(float price) {
+        if (initialPrice == null)
+            this.initialPrice = price;
         this.price = price;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void reset() {
+        this.price = initialPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "------------------\n" +
+                "PRODUCT" +
+                "Id: " + this.id + '\n' +
+                "Name: " + this.name + '\n' +
+                "Description: " + this.description + '\n' +
+                "Price: " + this.price + '\n' +
+                "Category: " + this.category + '\n' +
+                "------------------";
     }
 }

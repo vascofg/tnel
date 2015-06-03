@@ -5,12 +5,10 @@ import jade.core.ProfileImpl;
 import jade.wrapper.AgentController;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.tnel.meau.agents.BuyerAgent;
-import org.tnel.meau.items.*;
+import org.tnel.meau.items.Product;
 import org.tnel.meau.participants.Seller;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,8 +17,9 @@ import java.util.List;
  */
 public class Meau {
 
-    private static List<Product> products = new LinkedList<>();
-    private static List<Seller> sellers = new LinkedList<>();
+    public static boolean auctionRunning = false;
+    private static List<Product> products = new ArrayList<>();
+    private static List<Seller> sellers = new ArrayList<>();
     public static jade.wrapper.AgentContainer mainContainer = null;
 
 
@@ -36,6 +35,14 @@ public class Meau {
         for (int i = 0; i < getProducts().size(); i++)
             if (getProducts().get(i).getId() == id)
                 return getProducts().get(i);
+
+        return null;
+    }
+
+    public static Seller getSellerByAgentName(String name) {
+        for (int i = 0; i < getSellers().size(); i++)
+            if (getSellers().get(i).getName().equals(name))
+                return getSellers().get(i);
 
         return null;
     }
@@ -81,7 +88,7 @@ public class Meau {
         // now set the default Profile to start a container
         ProfileImpl pContainer = new ProfileImpl(null, 1200, null);
 
-       // jade.wrapper.AgentContainer cont = rt.createAgentContainer(pContainer);
+        // jade.wrapper.AgentContainer cont = rt.createAgentContainer(pContainer);
 
         System.out.println("[JADE]Launching the rma agent on the main container ...");
         AgentController rma = mainContainer.createNewAgent("rma",
@@ -93,9 +100,9 @@ public class Meau {
         products.add(new Product("Batatas brancas", "Batatas ideais para cozer", 18, "batatas"));
 
         sellers.add(new Seller("REI DAS BATATAS", products.get(0), mainContainer, 2, 18));
-        sellers.add(new Seller("VASCO BATATAS NO CU", products.get(1), mainContainer, 1, 7));
+        sellers.add(new Seller("EL BATATON", products.get(1), mainContainer, 1, 7));
 
-        mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "batatas")).start();
+        //mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "piça")).start();
 
         // Start server
         server.start();

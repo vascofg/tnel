@@ -1,6 +1,7 @@
 package org.tnel.meau.participants;
 
 import com.wordnik.swagger.annotations.ApiModel;
+import jade.core.Agent;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
@@ -32,16 +33,17 @@ public class Seller {
         this.decrement = decrement;
         this.minPrice = minPrice;
         try {
-            this.agentController = containerController.createNewAgent(this.name, SellerAgent.class.getName(), new Object[] {this});
-            this.agentController.start();
+            this.createAgent(containerController);
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
     }
 
-    public void createAgent(ContainerController containerController) throws StaleProxyException {
-        this.agentController = containerController.createNewAgent(this.name, SellerAgent.class.getName(),
-                new Object[]{});
+    public Agent createAgent(ContainerController containerController) throws StaleProxyException {
+        Agent agent = new SellerAgent(this);
+        this.agentController = containerController.acceptNewAgent(this.getName(), agent);
+        this.agentController.start();
+        return agent;
     }
 
     public String getName() {
@@ -50,6 +52,14 @@ public class Seller {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public AgentController getAgentController() {
+        return agentController;
+    }
+
+    public void setAgentController(AgentController agentController) {
+        this.agentController = agentController;
     }
 
     public Product getProduct() {
@@ -64,7 +74,26 @@ public class Seller {
         return decrement;
     }
 
+    public void setDecrement(float decrement) {
+        this.decrement = decrement;
+    }
+
     public float getMinPrice() {
         return minPrice;
+    }
+
+    public void setMinPrice(float minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    @Override
+    public String toString() {//String name, Product productfloat decrement, float minPrice
+        return "------------------\n" +
+                "SELLER" +
+                "Name: " + this.name + '\n' +
+                "Product: " + this.product + '\n' +
+                "Decrement: " + this.decrement + '\n' +
+                "Minimum price: " + this.minPrice + '\n' +
+                "------------------";
     }
 }
