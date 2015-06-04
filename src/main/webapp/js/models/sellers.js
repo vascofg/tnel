@@ -7,7 +7,7 @@ app.service('SellerModel', [
 
         this.get = function () {
             var deferred = $q.defer();
-            $http.get('/api/sellers').then(function (result) {
+            $http.get('/api/auctions/sellers').then(function (result) {
                 deferred.resolve(result.data);
             }, function (error) {
                 deferred.reject(error.data);
@@ -18,7 +18,7 @@ app.service('SellerModel', [
 
         this.create = function (seller) {
             var deferred = $q.defer();
-            $http.post('/api/sellers', seller).then(function (result) {
+            $http.post('/api/auctions/sellers', seller).then(function (result) {
                 deferred.resolve(result.data);
             }, function (error) {
                 deferred.reject(error.data);

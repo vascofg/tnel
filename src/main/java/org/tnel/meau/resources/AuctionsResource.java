@@ -14,9 +14,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/")
-@Api(value = "/participants", description = "Operations on participants")
-public class ParticipantsResource {
+@Path("/auctions")
+@Api(value = "/auctions", description = "Operations for auctions")
+public class AuctionsResource {
 
     @GET
     @Path("/sellers")
@@ -41,7 +41,6 @@ public class ParticipantsResource {
     }
 
     @POST
-    @Path("/auction")
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Start the auction")
     public Seller startAuction(Buyer buyer) {

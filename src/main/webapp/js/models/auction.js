@@ -7,7 +7,7 @@ app.service('AuctionModel', [
 
         this.create = function (auction) {
             var deferred = $q.defer();
-            $http.post('/api/auction', auction).then(function (result) {
+            $http.post('/api/auctions', auction).then(function (result) {
                 deferred.resolve(result.data);
             }, function (error) {
                 deferred.reject(error.data);
