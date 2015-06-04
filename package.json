@@ -1,0 +1,15 @@
+{
+  "name": "meau",
+  "private": true,
+  "description": "English Auction",
+  "version": "1.0.0",
+  "homepage": "http://meau.herokuapp.com",
+  "license": "proprietary",
+  "repository": "https://github.com/vascofg/meau",
+  "scripts": {
+    "postinstall": "bower install"
+  },
+  "dependencies": {
+    "bower": "^1.4.1"
+  }
+}
