@@ -45,7 +45,7 @@ public class BuyerAgent extends Agent {
         // Encontrar agentes do tipo seller
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd1 = new ServiceDescription();
-        sd1.setType("Seller");
+        sd1.setType(buyer.getCategory());
         template.addServices(sd1);
 
         ArrayList<DFAgentDescription> sellersDFAD = new ArrayList<>();
@@ -71,15 +71,14 @@ public class BuyerAgent extends Agent {
             public void onStart() {
                 //enviar mensagem para sellers com categoria de produto de interesse
                 ACLMessage message = new ACLMessage(ACLMessage.CFP);
-                message.setContent(buyer.getCategory());
 
                 for (int i = 0; i < sellers.size(); i++) {
                     message.addReceiver(sellers.get(i).getName());
-                    System.out.println("GOING TO SEND CFP TO " + sellers.get(i).getName());
+                    System.out.println("[BUYER] GOING TO SEND FIRST CFP TO " + sellers.get(i).getName().getLocalName());
                 }
 
                 send(message);
-                System.out.println("Enviado primeiro CFP");
+                System.out.println("[BUYER] SENDING FIRST CFP");
                 super.onStart();
             }
 
@@ -89,7 +88,7 @@ public class BuyerAgent extends Agent {
                 if (msg != null) {
                     switch (msg.getPerformative()) {
                         case ACLMessage.PROPOSE:
-                            System.out.println("recebida proposta " + msg.getContent());
+                            System.out.println("[BUYER] GOT PROPOSE FROM " + msg.getSender().getLocalName());
                             if(!sellerAgents.contains(msg.getSender())) {
                                 sellerAgents.add(msg.getSender());
                                 numberOfSellers++;
@@ -98,7 +97,7 @@ public class BuyerAgent extends Agent {
                             break;
                         case ACLMessage.INFORM:
                             sellers.remove(sellers.size() - 1);
-                            System.out.println("recebido inform para sair. N de vendedores atual: " + sellers.size());
+                            System.out.println("[BUYER] GOT LEFT INFORM FROM " + msg.getSender().getLocalName() + ". CURRENT NUMBER OF SELLERS: " + sellers.size());
                     }
                 } else
                     block();
@@ -137,7 +136,7 @@ public class BuyerAgent extends Agent {
                             if (!sellerAgents.get(i).equals(bestOfferAgent))
                                 otherOffers.addReceiver(sellerAgents.get(i));
                         send(otherOffers);
-                        System.out.println("WINNING AGENT NAME: " + bestOfferAgent.getLocalName());
+                        System.out.println("[BUYER] AUCTION SUCCESSFUL. BUYING FROM " + bestOfferAgent.getLocalName());
                         buyer.setBestOffer(bestOffer);
                         buyer.setBestOfferSeller(Meau.getSellerByAgentName(bestOfferAgent.getLocalName()));
                         synchronized (buyer.getDoneNotifier()) {
@@ -147,12 +146,11 @@ public class BuyerAgent extends Agent {
                     } else if (numberOfRounds < buyer.getMaxrounds()) {
                         // Envia novo CFP
                         ACLMessage message = new ACLMessage(ACLMessage.CFP);
-                        message.setContent(buyer.getCategory());
 
                         for (int i = 0; i < sellers.size(); i++)
                             message.addReceiver(sellerAgents.get(i));
 
-                        System.out.println("Enviado CFP");
+                        System.out.println("[BUYER] SENDING CFP");
                         send(message);
                         sellerAgents = new ArrayList<>();
                         numberOfSellers = 0;
@@ -164,7 +162,7 @@ public class BuyerAgent extends Agent {
             private void calculateValue(String messageContent, AID agentSender) {
                 Product product = Meau.getProductById(Integer.parseInt(messageContent));
                 BigDecimal price = product.getPrice();
-                System.out.println("Preco da proposta: " + price);
+                System.out.println("[BUYER] PROPOSAL PRICE: " + price);
 
                 //Se o preco da proposta for mais baixo que o melhor atual, atualiza
                 if (price.compareTo(bestOffer) == -1 || bestOffer.compareTo(new BigDecimal("-1")) == 0) {
@@ -173,7 +171,7 @@ public class BuyerAgent extends Agent {
                 }
             }
         });
-        System.out.println("Created Buyer Agent");
+        System.out.println("[BUYER] CREATED BUYER AGENT");
     }
 
     @Override

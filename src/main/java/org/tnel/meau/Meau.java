@@ -102,10 +102,14 @@ public class Meau {
         products.add(new Product("Batatas roxas", "Batatas ideais para assar", new BigDecimal("25"), "batatas"));
         products.add(new Product("Batatas amarelas", "Batatas ideais para puré", new BigDecimal("21"), "batatas"));
 
+        products.add(new Product("Portátil normal", "Standard", new BigDecimal("750"), "computadores"));
+
         sellers.add(new Seller("Rei das Batatas", products.get(0), mainContainer, new BigDecimal("0.5"), new BigDecimal("16")));
         sellers.add(new Seller("El Bataton", products.get(1), mainContainer, new BigDecimal("0.1"), new BigDecimal("14")));
         sellers.add(new Seller("Batatinha", products.get(2), mainContainer, new BigDecimal("0.6"), new BigDecimal("12")));
         sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, new BigDecimal("0.1"), new BigDecimal("18")));
+
+        sellers.add(new Seller("Computex", products.get(4), mainContainer, new BigDecimal("25"), new BigDecimal("500")));
 
         //mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "piça")).start();
 

@@ -59,14 +59,16 @@ public class AuctionsResource {
 
             Meau.auctionRunning = true;
 
+            System.out.println("[MEAU] STARTING AUCTION");
+
             /* START SELLERS */
-            System.out.println("STARTING SELLERS");
+            System.out.println("[MEAU] WAKING SELLERS");
             int startedSellers = 0;
             for (int i = 0; i < Meau.getSellers().size(); i++) {
                 Seller seller = Meau.getSellers().get(i);
                 if (seller.getProduct().getCategory().equals(buyer.getCategory())) {
-                    System.out.println("STARTING SELLER " + seller.getName());
                     seller.getAgentController().activate();
+                    System.out.println("[MEAU] WOKE SELLER " + seller.getName());
                     startedSellers++;
                 }
             }
@@ -81,7 +83,7 @@ public class AuctionsResource {
 
             Object notifier = new Object();
             buyer.setDoneNotifier(notifier);
-            System.out.println("STARTING BUYER");
+            System.out.println("[MEAU] CREATING BUYER AGENT");
             Agent buyerAgent = buyer.createAgent(Meau.mainContainer);
             buyerAgent.waitUntilStarted();
 
@@ -103,6 +105,8 @@ public class AuctionsResource {
             wonSeller.getProduct().reset();
 
             cloned.getProduct().setPrice(buyer.getBestOffer());
+
+            System.out.println("[MEAU] AUCTION SUCCESSFUL");
 
             return cloned;
         } catch (StaleProxyException e) {
