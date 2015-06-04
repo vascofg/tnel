@@ -14,5 +14,8 @@
     "font-awesome": "~4.3.0",
     "angular-toastr": "~1.4.1",
     "angular-sweetalert": "~1.1.0"
+  },
+  "resolutions": {
+    "angular": "1.4.0"
   }
 }
