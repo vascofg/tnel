@@ -34,7 +34,6 @@ public class BuyerAgent extends Agent {
         ServiceDescription sd = new ServiceDescription();
         sd.setName(BuyerAgent.class.getName());
         sd.setType("Buyer");
-        System.out.println("Created Buyer Agent");
         dfd.addServices(sd);
 
         try {
@@ -58,16 +57,6 @@ public class BuyerAgent extends Agent {
 
         final ArrayList<DFAgentDescription> sellers = new ArrayList<>(sellersDFAD);
 
-        //enviar mensagem para sellers com categoria de produto de interesse
-        ACLMessage message = new ACLMessage(ACLMessage.CFP);
-        message.setContent(buyer.getCategory());
-
-        for (int i = 0; i < sellers.size(); i++)
-            message.addReceiver(sellers.get(i).getName());
-
-        send(message);
-        System.out.println("Enviado primeiro CFP");
-
         // Receber propostas de negocio
         addBehaviour(new SimpleBehaviour() {
 
@@ -79,15 +68,33 @@ public class BuyerAgent extends Agent {
             ACLMessage msg;
 
             @Override
+            public void onStart() {
+                //enviar mensagem para sellers com categoria de produto de interesse
+                ACLMessage message = new ACLMessage(ACLMessage.CFP);
+                message.setContent(buyer.getCategory());
+
+                for (int i = 0; i < sellers.size(); i++) {
+                    message.addReceiver(sellers.get(i).getName());
+                    System.out.println("GOING TO SEND CFP TO " + sellers.get(i).getName());
+                }
+
+                send(message);
+                System.out.println("Enviado primeiro CFP");
+                super.onStart();
+            }
+
+            @Override
             public void action() {
                 msg = receive();
                 if (msg != null) {
                     switch (msg.getPerformative()) {
                         case ACLMessage.PROPOSE:
                             System.out.println("recebida proposta " + msg.getContent());
-                            sellerAgents.add(msg.getSender());
-                            numberOfSellers++;
-                            calculateValue(msg.getContent(), msg.getSender());
+                            if(!sellerAgents.contains(msg.getSender())) {
+                                sellerAgents.add(msg.getSender());
+                                numberOfSellers++;
+                                calculateValue(msg.getContent(), msg.getSender());
+                            }
                             break;
                         case ACLMessage.INFORM:
                             sellers.remove(sellers.size() - 1);
@@ -166,6 +173,7 @@ public class BuyerAgent extends Agent {
                 }
             }
         });
+        System.out.println("Created Buyer Agent");
     }
 
     @Override

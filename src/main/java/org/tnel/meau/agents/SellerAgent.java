@@ -67,7 +67,7 @@ public class SellerAgent extends Agent {
                             int id = SellerAgent.this.seller.getProduct().getId();
                             propose.setContent(id + "");
 
-                            System.out.println("Enviada proposta");
+                            System.out.println("[SELLER " + myAgent.getLocalName() + "] Enviada proposta");
                             send(propose);
                             break;
                         case ACLMessage.ACCEPT_PROPOSAL:
