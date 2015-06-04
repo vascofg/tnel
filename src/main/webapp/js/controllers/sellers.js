@@ -33,7 +33,13 @@ app.controller('sellersController', [
                     $scope.selectedItem = newSeller;
                     toastr.success('Seller added', 'Success');
                 }).catch(function (error) {
-                    SweetAlert.swal("Oops", "There was a problem adding the seller", "error");
+                    switch(error.status){
+                        case 400:
+                            SweetAlert.swal("Oops", "Bad request", "error");
+                            break;
+                        default:
+                            SweetAlert.swal("Oops", "There was a problem adding the seller", "error");
+                    }
                 });
             });
         };

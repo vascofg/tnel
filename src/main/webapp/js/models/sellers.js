@@ -10,7 +10,7 @@ app.service('SellerModel', [
             $http.get('/api/auctions/sellers').then(function (result) {
                 deferred.resolve(result.data);
             }, function (error) {
-                deferred.reject(error.data);
+                deferred.reject(error);
             });
 
             return deferred.promise;
@@ -21,7 +21,7 @@ app.service('SellerModel', [
             $http.post('/api/auctions/sellers', seller).then(function (result) {
                 deferred.resolve(result.data);
             }, function (error) {
-                deferred.reject(error.data);
+                deferred.reject(error);
             });
 
             return deferred.promise;

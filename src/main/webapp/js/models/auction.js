@@ -10,7 +10,7 @@ app.service('AuctionModel', [
             $http.post('/api/auctions', auction).then(function (result) {
                 deferred.resolve(result.data);
             }, function (error) {
-                deferred.reject(error.data);
+                deferred.reject(error);
             });
 
             return deferred.promise;

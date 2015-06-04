@@ -34,7 +34,7 @@ public class AuctionsResource {
         try {
             return Meau.getSellers().get(index);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("[400] Element not found");
+            System.out.println("[404] Element not found");
             throw new CustomWebApplicationException(Response.Status.NOT_FOUND,
                     "Element not found");
         }
@@ -72,8 +72,8 @@ public class AuctionsResource {
             }
 
             if (startedSellers == 0) {
-                System.out.println("[500] No agents for that category");
-                throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
+                System.out.println("[404] No agents for that category");
+                throw new CustomWebApplicationException(Response.Status.NOT_FOUND,
                         "No agents for that category");
             }
 
