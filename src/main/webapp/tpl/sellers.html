@@ -1,0 +1,105 @@
+<div class="fade-in">
+    <div class="bg-light lter b-b wrapper-md">
+        <span class="m-n font-thin h3">Sellers</span>
+
+        <div class="btn-group pull-right visible-xs">
+            <a class="btn btn-success" ng-click="openAddModal()">
+                <i class="fa fa-plus"></i>
+                <span>Add</span>
+            </a>
+        </div>
+        <a class="btn btn-success pull-right hidden-xs"
+           ng-click="openAddModal()">
+            <i class="fa fa-plus"></i>
+            <span>Add</span>
+        </a>
+    </div>
+    <div class="container wrapper-md bootcards-container" id="main">
+        <div class="row">
+            <div class="col-sm-5 bootcards-list" id="list" data-title="Devices">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="search-form">
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    <div class="form-group">
+                                        <input placeholder="Search sellers..." type="text"
+                                               class="form-control"
+                                               ng-model="itemSearchTerm">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item pjax" ng-class="{active: item.selected}"
+                           ng-repeat="item in items | filter: itemSearchTerm"
+                           ng-click="selectItem(item)">
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <i class="fa fa-3x fa-square-o pull-left"></i>
+                                    <h4 class="list-group-item-heading">{{item.name}}</h4>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="list-group-item pjax" ng-class="{active: item.selected}"
+                           ng-if="!items.length">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4 class="list-group-item-heading">No data...</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7 bootcards-cards" id="listDetails">
+
+                <div id="itemCard">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix">
+                            <h3 class="panel-title pull-left">Seller details</h3>
+                        </div>
+                        <div class="list-group">
+                            <a class="list-group-item">
+                                <label>Name</label>
+                                <h4 class="list-group-item-heading">{{selectedItem.name}}</h4>
+                            </a>
+                            <a class="list-group-item">
+                                <label>Decrement</label>
+                                <h4 class="list-group-item-heading">{{selectedItem.decrement}}</h4>
+                            </a>
+                            <a class="list-group-item">
+                                <label>Minimum price</label>
+                                <h4 class="list-group-item-heading">{{selectedItem.minPrice}}</h4>
+                            </a>
+
+                            <div class="panel-heading clearfix">
+                                <h3 class="panel-title pull-left">Product</h3>
+                            </div>
+                            <a class="list-group-item">
+                                <label>Name</label>
+                                <h4 class="list-group-item-heading">{{selectedItem.product.name}}</h4>
+                            </a>
+                            <a class="list-group-item">
+                                <label>Category</label>
+                                <h4 class="list-group-item-heading">{{selectedItem.product.category}}</h4>
+                            </a>
+                            <a class="list-group-item">
+                                <label>Price</label>
+                                <h4 class="list-group-item-heading">{{selectedItem.product.price}}</h4>
+                            </a>
+                            <a class="list-group-item">
+                                <label>Description</label>
+                                <h4 class="list-group-item-heading">{{selectedItem.product.description}}</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

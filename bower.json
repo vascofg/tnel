@@ -1,0 +1,18 @@
+{
+  "name": "meau",
+  "private": true,
+  "description": "English Auction",
+  "version": "1.0.0",
+  "homepage": "http://meau.herokuapp.com",
+  "license": "proprietary",
+  "repository": "https://github.com/vascofg/meau",
+  "dependencies": {
+    "angular": "1.4.0",
+    "angular-ui-router": "0.2.15",
+    "bootstrap": "~3.3.4",
+    "angular-bootstrap": "~0.13.0",
+    "font-awesome": "~4.3.0",
+    "angular-toastr": "~1.4.1",
+    "angular-sweetalert": "~1.1.0"
+  }
+}

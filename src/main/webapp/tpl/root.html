@@ -1,0 +1,28 @@
+<!-- navbar -->
+<div data-ng-include=" 'tpl/header.html' " class="app-header navbar">
+</div>
+<!-- / navbar -->
+
+<!-- menu -->
+<div data-ng-include=" 'tpl/aside.html' " class="app-aside">
+</div>
+<!-- / menu -->
+
+<!-- content -->
+<div class="app-content">
+    <a href class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside"></a>
+
+    <div class="app-content-body fade-in-up" ui-view>
+        <div class="bg-light lter b-b wrapper-md" style="margin-bottom: 20px;">
+            <h1 class="font-thin h1">Welcome to MEAu</h1>
+        </div>
+    </div>
+</div>
+<!-- /content -->
+
+<!-- footer -->
+<div class="app-footer wrapper b-t bg-light">
+    <span class="pull-right"></span>
+    &copy; 2015 Copyright MEAu
+</div>
+<!-- / footer -->

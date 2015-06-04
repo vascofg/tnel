@@ -76,7 +76,7 @@ public class SellerAgent extends Agent {
                             System.out.println("reject proposal recebido por " + getName());
                             SellerAgent.this.buyer = msg.getSender();
                             //ajustar proposta
-                            seller.getProduct().setPrice(seller.getProduct().getPrice() - seller.getDecrement());
+                            seller.getProduct().setPrice(seller.getProduct().getPrice().subtract(seller.getDecrement()));
                             break;
                         case ACLMessage.INFORM:
                             System.out.println("inform recebido");
@@ -95,7 +95,7 @@ public class SellerAgent extends Agent {
                         myAgent.doSuspend();
                         return;
                     } else if (msg.getPerformative() == ACLMessage.REJECT_PROPOSAL)
-                        if (seller.getProduct().getPrice() < seller.getMinPrice()) {
+                        if (seller.getProduct().getPrice().compareTo(seller.getMinPrice()) == -1) {
                             ACLMessage leaveAuction = new ACLMessage(ACLMessage.INFORM);
                             leaveAuction.addReceiver(buyer);
                             leaveAuction.setContent("leave");

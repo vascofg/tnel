@@ -1,0 +1,68 @@
+<div class="fade-in">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">Auction</h1>
+    </div>
+    <div class="wrapper-md">
+        <form name="form" class="form-horizontal form-validation" method="get" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">
+                    Auction information
+                </div>
+
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Category</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control rounded" ng-model="auction.category"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Maximum rounds</label>
+
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control rounded" min="1" step="1"
+                                   ng-model="auction.maxrounds"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Timeout (seconds)</label>
+
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control rounded" min="1" step="1"
+                                   ng-model="auction.timeout"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Buyer name</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control rounded" ng-model="auction.name"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button translate="createEvent.CANCEL" type="reset" class="btn btn-default">Cancel</button>
+                            <button translate="createEvent.SUBMIT" type="submit" class="btn btn-primary"
+                                    ng-click="create()" ng-disabled="form.$invalid">Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

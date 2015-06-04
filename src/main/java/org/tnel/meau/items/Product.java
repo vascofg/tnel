@@ -3,6 +3,7 @@ package org.tnel.meau.items;
 import com.wordnik.swagger.annotations.ApiModel;
 
 import javax.xml.bind.annotation.*;
+import java.math.BigDecimal;
 
 @XmlRootElement(name = "product")
 @ApiModel(value = "Product", description = "Product model")
@@ -16,20 +17,21 @@ public class Product {
     @XmlElement(required = true)
     protected String description;
     @XmlElement(required = true)
-    protected float price;
+    protected BigDecimal price;
     @XmlElement(required = true)
     protected String category;
 
     @XmlTransient
-    protected Float initialPrice;
+    protected BigDecimal initialPrice;
 
+    @XmlTransient
     protected int id;
 
     public Product() {
         this.id = NEXT_ID++;
     }
 
-    public Product(String name, String description, float price, String category) {
+    public Product(String name, String description, BigDecimal price, String category) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -72,11 +74,11 @@ public class Product {
         this.description = description;
     }
 
-    public float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(BigDecimal price) {
         if (initialPrice == null)
             this.initialPrice = price;
         this.price = price;
@@ -106,6 +108,6 @@ public class Product {
         return (product.getName() != null && !product.getName().isEmpty() &&
                 product.getDescription() != null && !product.getDescription().isEmpty() &&
                 product.getCategory() != null && !product.getCategory().isEmpty() &&
-                product.getPrice() > 0 && product.getId() > 0);
+                product.getPrice().compareTo(BigDecimal.ZERO) == 1 && product.getId() > 0);
     }
 }

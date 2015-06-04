@@ -1,11 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html data-ng-app="app" ng-strict-di>
 <head lang="en">
     <meta charset="UTF-8">
     <title>MEAu</title>
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/app.css" type="text/css"/>
+    <link rel="stylesheet" href="custom_components/bootcards/css/bootcards-desktop.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css" type="text/css"/>
 </head>
 <body>
-    <h2>Welcome to MEAu</h2>
-    <p><a href="/documentation">API Documentation</a></p>
+<div class="app" id="app"
+     ui-view></div>
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+
+<!-- sweet-alert -->
+<script src="bower_components/sweetalert/dist/sweetalert-dev.js"></script>
+<script src="bower_components/angular-sweetalert/SweetAlert.js"></script>
+
+<!-- toastr -->
+<script src="bower_components/angular-toastr/dist/angular-toastr.tpls.js"></script>
+
+<!-- bootstrap -->
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+<script src="custom_components/bootcards/js/bootcards.js"></script>
+
+<script src="js/app.js"></script>
+<script src="js/config.router.js"></script>
+
+<script src="js/controllers/sellers.js"></script>
+<script src="js/controllers/auction.js"></script>
+
+<script src="js/models/sellers.js"></script>
+<script src="js/models/auction.js"></script>
+
 </body>
 </html>

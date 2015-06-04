@@ -1,0 +1,50 @@
+<!-- Modal -->
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span
+            class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="modalLabel">Add seller</h4>
+</div>
+<form role="form" class="form-validation" name="form" novalidate>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label" for="name">Name</label>
+            <input type="text" id="name" class="form-control" ng-model="newItem.name" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="decrement">Decrement</label>
+            <input type="number" id="decrement" class="form-control" min="0.01" step="0.01" ng-model="newItem.decrement"
+                   required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="minPrice">Minimum price</label>
+            <input type="number" id="minPrice" class="form-control" min="0.01" step="0.01" ng-model="newItem.minPrice"
+                   required>
+        </div>
+        <h4 class="modal-title">Product</h4>
+
+        <div class="form-group">
+            <label class="control-label" for="productName">Name</label>
+            <input type="text" id="productName" class="form-control" ng-model="newItem.product.name" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="productCategory">Category</label>
+            <input type="text" id="productCategory" class="form-control" ng-model="newItem.product.category" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="productPrice">Price</label>
+            <input type="number" id="productPrice" class="form-control" min="0.01" step="0.01"
+                   ng-model="newItem.product.price" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="productDescription">Description</label>
+            <input type="text" id="productDescription" class="form-control" ng-model="newItem.product.description"
+                   required>
+        </div>
+
+        <div class="modal-footer form-group">
+            <button type="reset" class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" ng-click="ok()"
+                    ng-disabled="form.$invalid">Submit
+            </button>
+        </div>
+</form>

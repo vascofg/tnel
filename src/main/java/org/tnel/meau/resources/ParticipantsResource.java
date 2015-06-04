@@ -6,7 +6,6 @@ import jade.core.Agent;
 import jade.wrapper.StaleProxyException;
 import org.tnel.meau.Meau;
 import org.tnel.meau.exceptions.CustomWebApplicationException;
-import org.tnel.meau.items.Product;
 import org.tnel.meau.participants.Buyer;
 import org.tnel.meau.participants.Seller;
 
@@ -15,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/participants")
+@Path("/")
 @Api(value = "/participants", description = "Operations on participants")
 public class ParticipantsResource {
 
@@ -42,10 +41,10 @@ public class ParticipantsResource {
     }
 
     @POST
-    @Path("/buyers")
+    @Path("/auction")
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Insert a buyer and start the auction")
-    public Product addBuyer(Buyer buyer) {
+    @ApiOperation(value = "Start the auction")
+    public Seller startAuction(Buyer buyer) {
         try {
             if (!Buyer.isValid(buyer)) {
                 System.out.println("[400] Invalid paramter");
@@ -89,7 +88,7 @@ public class ParticipantsResource {
 
             synchronized (buyer.getDoneNotifier()) {
                 //auction timeout
-                notifier.wait(10000);
+                notifier.wait(buyer.getTimeout() * 1000);
             }
 
             if (buyer.getBestOfferSeller() == null) {
@@ -99,14 +98,13 @@ public class ParticipantsResource {
             }
 
             Seller wonSeller = buyer.getBestOfferSeller();
-            //clone product
-            Product wonProduct = new Product(wonSeller.getProduct());
+            //clone seller
+            Seller cloned = new Seller(wonSeller);
+            
             //reset product price
             wonSeller.getProduct().reset();
 
-            buyer.getAgentController().kill();
-
-            return wonProduct;
+            return cloned;
         } catch (StaleProxyException e) {
             System.out.println("[500] JADE error");
             throw new CustomWebApplicationException(Response.Status.INTERNAL_SERVER_ERROR,
@@ -119,9 +117,13 @@ public class ParticipantsResource {
             System.out.println("[400] Illegal argument");
             throw new CustomWebApplicationException(Response.Status.BAD_REQUEST,
                     e.getMessage());
-        }
-        finally {
+        } finally {
             Meau.auctionRunning = false;
+            try {
+                buyer.getAgentController().kill();
+            } catch(Exception e) {
+                //nothing can be done...
+            }
         }
     }
 
@@ -131,12 +133,13 @@ public class ParticipantsResource {
     @ApiOperation(value = "Insert a seller")
     public Seller addSeller(Seller seller) {
         if (!Seller.isValid(seller)) {
-            System.out.println("[400] Invalid paramter");
+            System.out.println("[400] Invalid parameter");
             throw new CustomWebApplicationException(Response.Status.BAD_REQUEST,
                     "Invalid paramter");
         }
         if (Meau.getSellers().add(seller)) {
             try {
+                Meau.getProducts().add(seller.getProduct());
                 seller.createAgent(Meau.mainContainer);
                 return seller;
             } catch (StaleProxyException e) {

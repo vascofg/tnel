@@ -12,6 +12,7 @@ import org.tnel.meau.Meau;
 import org.tnel.meau.items.Product;
 import org.tnel.meau.participants.Buyer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -71,7 +72,7 @@ public class BuyerAgent extends Agent {
         addBehaviour(new SimpleBehaviour() {
 
             AID bestOfferAgent;
-            float bestOffer = -1;
+            BigDecimal bestOffer = new BigDecimal(-1);
             ArrayList<AID> sellerAgents = new ArrayList<>();
             int numberOfSellers = 0, numberOfRounds = 0;
 
@@ -115,14 +116,6 @@ public class BuyerAgent extends Agent {
                     send(reject);
                     numberOfRounds++;
 
-                    //Wait for sellers to adjust their proposals
-                    try {
-                        Thread.sleep(500);
-                        System.out.println("---Waiting---");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
                     //Verificar fim de leilao
                     if (numberOfRounds == buyer.getMaxrounds() || sellers.size() == 1) {
                         ACLMessage bestOfferMsg = new ACLMessage(ACLMessage.INFORM);
@@ -162,11 +155,11 @@ public class BuyerAgent extends Agent {
 
             private void calculateValue(String messageContent, AID agentSender) {
                 Product product = Meau.getProductById(Integer.parseInt(messageContent));
-                float price = product.getPrice();
+                BigDecimal price = product.getPrice();
                 System.out.println("Preco da proposta: " + price);
 
                 //Se o preco da proposta for mais baixo que o melhor atual, atualiza
-                if (price < bestOffer || bestOffer == -1) {
+                if (price.compareTo(bestOffer) == -1 || bestOffer.compareTo(new BigDecimal("-1")) == 0) {
                     bestOffer = price;
                     bestOfferAgent = agentSender;
                 }

@@ -25,6 +25,9 @@ public class Buyer {
     @XmlAttribute(name = "maxrounds", required = true)
     int maxrounds;
 
+    @XmlAttribute(name = "timeout", required = true)
+    int timeout;
+
     @XmlTransient
     Object doneNotifier;
 
@@ -104,6 +107,14 @@ public class Buyer {
         this.agentController = agentController;
     }
 
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
     @Override
     public String toString() {
         return "------------------\n" +
@@ -111,11 +122,12 @@ public class Buyer {
                 "Name: " + this.name + '\n' +
                 "Category: " + this.category + '\n' +
                 "Max rounds: " + this.maxrounds + '\n' +
+                "Timeout: " + this.timeout + '\n' +
                 "------------------";
     }
 
     public static boolean isValid(Buyer buyer) {
-        return (buyer.getMaxrounds() > 0 && buyer.getCategory() != null &&
+        return (buyer.getMaxrounds() > 0 && buyer.getTimeout() > 0 && buyer.getCategory() != null &&
                 !buyer.getCategory().isEmpty() && buyer.getName() != null &&
                 !buyer.getName().isEmpty());
     }

@@ -9,6 +9,7 @@ import org.tnel.meau.agents.SellerAgent;
 import org.tnel.meau.items.Product;
 
 import javax.xml.bind.annotation.*;
+import java.math.BigDecimal;
 
 @XmlRootElement(name = "seller")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -22,12 +23,12 @@ public class Seller {
 
     protected Product product;
 
-    float decrement, minPrice;
+    BigDecimal decrement, minPrice;
 
     public Seller() {
     }
 
-    public Seller(String name, Product product, ContainerController containerController, float decrement, float minPrice) {
+    public Seller(String name, Product product, ContainerController containerController, BigDecimal decrement, BigDecimal minPrice) {
         this.name = name;
         this.product = product;
         this.decrement = decrement;
@@ -37,6 +38,13 @@ public class Seller {
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
+    }
+
+    public Seller(Seller other) {
+        this.name = other.name;
+        this.product = new Product(other.product);
+        this.decrement = other.decrement;
+        this.minPrice = other.minPrice;
     }
 
     public Agent createAgent(ContainerController containerController) throws StaleProxyException {
@@ -70,19 +78,19 @@ public class Seller {
         this.product = product;
     }
 
-    public float getDecrement() {
+    public BigDecimal getDecrement() {
         return decrement;
     }
 
-    public void setDecrement(float decrement) {
+    public void setDecrement(BigDecimal decrement) {
         this.decrement = decrement;
     }
 
-    public float getMinPrice() {
+    public BigDecimal getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(float minPrice) {
+    public void setMinPrice(BigDecimal minPrice) {
         this.minPrice = minPrice;
     }
 
@@ -100,6 +108,6 @@ public class Seller {
     public static boolean isValid(Seller seller) {
         return (seller.getName() != null && !seller.getName().isEmpty() &&
                 Product.isValid(seller.getProduct()) &&
-                seller.decrement > 0 && seller.minPrice > 0);
+                seller.decrement.compareTo(BigDecimal.ZERO) == 1 && seller.minPrice.compareTo(BigDecimal.ZERO) == 1);
     }
 }
