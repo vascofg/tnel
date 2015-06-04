@@ -99,9 +99,7 @@ public class AuctionsResource {
             Seller wonSeller = buyer.getBestOfferSeller();
             //clone seller
             Seller cloned = new Seller(wonSeller);
-            
-            //reset product price
-            wonSeller.getProduct().reset();
+            cloned.getProduct().setPrice(buyer.getBestOffer());
 
             return cloned;
         } catch (StaleProxyException e) {

@@ -2,6 +2,7 @@ package org.tnel.meau;
 
 import jade.core.Profile;
 import jade.core.ProfileImpl;
+import jade.wrapper.AgentController;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.tnel.meau.items.Product;
@@ -90,17 +91,21 @@ public class Meau {
 
         // jade.wrapper.AgentContainer cont = rt.createAgentContainer(pContainer);
 
-        /*System.out.println("[JADE]Launching the rma agent on the main container ...");
+        System.out.println("[JADE]Launching the rma agent on the main container ...");
         AgentController rma = mainContainer.createNewAgent("rma",
                 "jade.tools.rma.rma", new Object[0]);
-        rma.start();*/
+        rma.start();
 
         // Add sample data
         products.add(new Product("Batatas vermelhas", "Batatas ideais para fritar", new BigDecimal("20"), "batatas"));
-        products.add(new Product("Batatas brancas", "Batatas ideais para cozer", new BigDecimal("20"), "batatas"));
+        products.add(new Product("Batatas brancas", "Batatas ideais para cozer", new BigDecimal("18"), "batatas"));
+        products.add(new Product("Batatas roxas", "Batatas ideais para assar", new BigDecimal("25"), "batatas"));
+        products.add(new Product("Batatas amarelas", "Batatas ideais para puré", new BigDecimal("21"), "batatas"));
 
-        sellers.add(new Seller("REI DAS BATATAS", products.get(0), mainContainer, new BigDecimal("0.05"), new BigDecimal("16")));
-        sellers.add(new Seller("EL BATATON", products.get(1), mainContainer, new BigDecimal("0.1"), new BigDecimal("14")));
+        sellers.add(new Seller("Rei das Batatas", products.get(0), mainContainer, new BigDecimal("0.5"), new BigDecimal("16")));
+        sellers.add(new Seller("El Bataton", products.get(1), mainContainer, new BigDecimal("0.1"), new BigDecimal("14")));
+        sellers.add(new Seller("Batatinha", products.get(2), mainContainer, new BigDecimal("0.6"), new BigDecimal("12")));
+        sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, new BigDecimal("0.1"), new BigDecimal("18")));
 
         //mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "piça")).start();
 

@@ -10,6 +10,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import org.tnel.meau.participants.Seller;
 
+import java.math.BigDecimal;
 public class SellerAgent extends Agent {
 
     Seller seller;
@@ -41,6 +42,7 @@ public class SellerAgent extends Agent {
         addBehaviour(new CyclicBehaviour(this) {
 
             String message;
+            BigDecimal currentBestOffer;
             ACLMessage msg;
 
             @Override
@@ -48,10 +50,10 @@ public class SellerAgent extends Agent {
                 msg = receive();
 
                 if (msg != null) {
+                    message = msg.getContent();
                     switch (msg.getPerformative()) {
                         // Mensagem com categoria de produtos a negociar
                         case ACLMessage.CFP:
-                            message = msg.getContent();
                             System.out.println("CFP recebido: " + message);
 
                             if (!message.equals(seller.getProduct().getCategory())) {
@@ -75,8 +77,23 @@ public class SellerAgent extends Agent {
                         case ACLMessage.REJECT_PROPOSAL:
                             System.out.println("reject proposal recebido por " + getName());
                             SellerAgent.this.buyer = msg.getSender();
+                            //obter melhor proposta
+                            currentBestOffer = new BigDecimal(message);
+
                             //ajustar proposta
-                            seller.getProduct().setPrice(seller.getProduct().getPrice().subtract(seller.getDecrement()));
+                            System.out.println("[SELLER " + getLocalName() + "] BEST OFFER: " + currentBestOffer);
+                            seller.getProduct().setPrice(currentBestOffer.subtract(seller.getDecrement()));
+
+                            if (seller.getProduct().getPrice().compareTo(seller.getMinPrice()) == -1) {
+                                ACLMessage leaveAuction = new ACLMessage(ACLMessage.INFORM);
+                                leaveAuction.addReceiver(buyer);
+                                leaveAuction.setContent("leave");
+                                send(leaveAuction);
+                                seller.getProduct().reset();
+                                myAgent.doSuspend();
+                                return;
+                            }
+
                             break;
                         case ACLMessage.INFORM:
                             System.out.println("inform recebido");
@@ -91,23 +108,11 @@ public class SellerAgent extends Agent {
                         default:
                             break;
                     }
-                    if (msg.getPerformative() == ACLMessage.INFORM) {
-                        myAgent.doSuspend();
-                        return;
-                    } else if (msg.getPerformative() == ACLMessage.REJECT_PROPOSAL)
-                        if (seller.getProduct().getPrice().compareTo(seller.getMinPrice()) == -1) {
-                            ACLMessage leaveAuction = new ACLMessage(ACLMessage.INFORM);
-                            leaveAuction.addReceiver(buyer);
-                            leaveAuction.setContent("leave");
-                            send(leaveAuction);
-                            seller.getProduct().reset();
-                            myAgent.doSuspend();
-                            return;
-                        }
                 } else
                     block();
             }
         });
+        this.doSuspend();
     }
 
     @Override

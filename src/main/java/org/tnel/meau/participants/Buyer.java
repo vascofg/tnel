@@ -8,6 +8,7 @@ import jade.wrapper.StaleProxyException;
 import org.tnel.meau.agents.BuyerAgent;
 
 import javax.xml.bind.annotation.*;
+import java.math.BigDecimal;
 
 @XmlRootElement(name = "buyer")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -36,6 +37,9 @@ public class Buyer {
 
     @XmlTransient
     protected AgentController agentController;
+
+    @XmlTransient
+    private BigDecimal bestOffer;
 
     public Buyer() {
     }
@@ -113,6 +117,14 @@ public class Buyer {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public BigDecimal getBestOffer() {
+        return bestOffer;
+    }
+
+    public void setBestOffer(BigDecimal bestOffer) {
+        this.bestOffer = bestOffer;
     }
 
     @Override

@@ -108,7 +108,7 @@ public class BuyerAgent extends Agent {
                     accept.addReceiver(bestOfferAgent);
                     send(accept);
 
-                    reject.setContent("rejected");
+                    reject.setContent(bestOffer.toPlainString());
                     for (int i = 0; i < sellerAgents.size(); i++)
                         if (!sellerAgents.get(i).equals(bestOfferAgent))
                             reject.addReceiver(sellerAgents.get(i));
@@ -131,6 +131,7 @@ public class BuyerAgent extends Agent {
                                 otherOffers.addReceiver(sellerAgents.get(i));
                         send(otherOffers);
                         System.out.println("WINNING AGENT NAME: " + bestOfferAgent.getLocalName());
+                        buyer.setBestOffer(bestOffer);
                         buyer.setBestOfferSeller(Meau.getSellerByAgentName(bestOfferAgent.getLocalName()));
                         synchronized (buyer.getDoneNotifier()) {
                             buyer.getDoneNotifier().notify();
