@@ -151,6 +151,7 @@ public class SellerAgent extends Agent {
                         seller.getProduct().setPrice(seller.getProduct().getPrice().subtract(decrement));
                         break;
 
+                    case "lastround": //decrementa apenas no fim, a partir do preço da ultima melhor oferta
                         if (lastRound)
                             seller.getProduct().setPrice(currentBestOffer.subtract(decrement));
                         break;
