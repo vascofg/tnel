@@ -68,15 +68,15 @@ public class SellerAgent extends Agent {
                             send(propose);
                             break;
                         case ACLMessage.ACCEPT_PROPOSAL:
-                            System.out.println("[SELLER " + getLocalName() + "] GOT ACCEPT_PROPOSAL");
+
                             SellerAgent.this.buyer = msg.getSender();
                             String[] content = message.split(" ");
 
                             currentBestOffer = seller.getProduct().getPrice();
                             Integer round = Integer.parseInt(content[0]);
                             Integer nRounds = Integer.parseInt(content[1]);
-
-                            adjustProposal(true, round, round == nRounds);
+                            System.out.println("[SELLER " + getLocalName() + "] GOT ACCEPT_PROPOSAL. price: "+ currentBestOffer);
+                            adjustProposal(true, round, round == nRounds-2);
 
                             System.out.println("[SELLER " + getLocalName() + "] NEW OFFER: " + seller.getProduct().getPrice() + " (previous offer accepted)");
                             break;
@@ -89,7 +89,7 @@ public class SellerAgent extends Agent {
                             round = Integer.parseInt(content[1]);
                             nRounds = Integer.parseInt(content[2]);
 
-                            adjustProposal(false, round, round == nRounds);
+                            adjustProposal(false, round, round == nRounds-2);
 
                             System.out.println("[SELLER " + getLocalName() + "] NEW OFFER: " + seller.getProduct().getPrice() + " (previous offer rejected)");
 
@@ -128,15 +128,13 @@ public class SellerAgent extends Agent {
 
                 switch (seller.getStrategy()) {
                     case "aggressive": // na primeira ronda decrementa logo um valor grande, nao fazendo mais nada o resto do leilao
-                        if (round == 1)
+                        if (round == 0)
                             seller.getProduct().setPrice(seller.getMinPrice().multiply(new BigDecimal(1.15)));
 
                         break;
                     case "reactive": //muda aposta se a dele for ultrapassada, nao tendo em conta a melhor oferta
                         if (!bestOfferIsMine)
                             decrement = seller.getDecrement();
-
-                        System.out.println("--------------decremento "+ decrement);
 
                         seller.getProduct().setPrice(seller.getProduct().getPrice().subtract(decrement));
                         System.out.println("--------------preco fica a "+seller.getProduct().getPrice());
@@ -152,8 +150,10 @@ public class SellerAgent extends Agent {
                         break;
 
                     case "lastround": //decrementa apenas no fim, a partir do preço da ultima melhor oferta
-                        if (lastRound)
-                            seller.getProduct().setPrice(currentBestOffer.subtract(decrement));
+                        if (lastRound) {
+                            seller.getProduct().setPrice(currentBestOffer.subtract(seller.getDecrement()));
+                            //System.out.println("a"+seller.getProduct().getPrice());
+                        }
                         break;
 
                     case "smart": //decrementa quando a aposta dele por ultrapassada ou quando for o ultimo round
@@ -167,7 +167,7 @@ public class SellerAgent extends Agent {
             }
         });
         // comentar para testar so com java
-        this.doSuspend();
+        //this.doSuspend();
     }
 
     @Override

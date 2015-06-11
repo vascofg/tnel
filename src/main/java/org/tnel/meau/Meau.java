@@ -96,7 +96,7 @@ public class Meau {
         System.out.println("[JADE]Launching the rma agent on the main container ...");
         AgentController rma = mainContainer.createNewAgent("rma",
                 "jade.tools.rma.rma", new Object[0]);
-        rma.start();
+        //rma.start();
 
         // Add sample data
         products.add(new Product("Batatas vermelhas", "Batatas ideais para fritar", new BigDecimal("20"), "batatas"));
@@ -107,15 +107,16 @@ public class Meau {
 
         //products.add(new Product("Portátil normal", "Standard", new BigDecimal("750"), "computadores"));
 
-        sellers.add(new Seller("Rei das Batatas", products.get(0), mainContainer, "reactive", new BigDecimal("0.5"), new BigDecimal("16")));
+        sellers.add(new Seller("Rei das Batatas", products.get(0), mainContainer, "reactive", new BigDecimal("0.2"), new BigDecimal("16")));
         sellers.add(new Seller("El Bataton", products.get(1), mainContainer, "progressive", new BigDecimal("0.1"), new BigDecimal("14")));
-        sellers.add(new Seller("Batatinha", products.get(2), mainContainer, "lastround", new BigDecimal("0.3"), new BigDecimal("12")));
-        sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, "greedy", new BigDecimal("0.1"), new BigDecimal("15")));
+        //sellers.add(new Seller("Batatinha", products.get(2), mainContainer, "lastround", new BigDecimal("0.2"), new BigDecimal("12")));
+        //sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, "greedy", new BigDecimal("0.1"), new BigDecimal("15")));
         sellers.add(new Seller("Batatas Plus", products.get(4), mainContainer, "aggressive", new BigDecimal("0.1"), new BigDecimal("15")));
+
         //sellers.add(new Seller("Computex", products.get(4), mainContainer, "agressive", new BigDecimal("25"), new BigDecimal("500")));
 
 
-        //new Buyer("Buyerino", "batatas", 5, new Object(), mainContainer);
+        new Buyer("Buyerino", "batatas", 5, new Object(), mainContainer);
 
         // Start server
         server.start();
