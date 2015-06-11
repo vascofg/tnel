@@ -127,7 +127,7 @@ public class SellerAgent extends Agent {
                 BigDecimal decrement = new BigDecimal(0);
 
                 switch (seller.getStrategy()) {
-                    case "agressive": // na primeira ronda decrementa logo um valor grande, nao fazendo mais nada o resto do leilao
+                    case "aggressive": // na primeira ronda decrementa logo um valor grande, nao fazendo mais nada o resto do leilao
                         if (round == 1)
                             seller.getProduct().setPrice(seller.getMinPrice().multiply(new BigDecimal(1.15)));
 

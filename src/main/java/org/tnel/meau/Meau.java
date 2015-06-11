@@ -111,7 +111,7 @@ public class Meau {
         sellers.add(new Seller("Batatinha", products.get(2), mainContainer, "lastround", new BigDecimal("0.6"), new BigDecimal("12")));
         sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, "greedy", new BigDecimal("0.1"), new BigDecimal("18")));
 
-        sellers.add(new Seller("Computex", products.get(4), mainContainer, "agressive", new BigDecimal("25"), new BigDecimal("500")));
+        sellers.add(new Seller("Computex", products.get(4), mainContainer, "aggressive", new BigDecimal("25"), new BigDecimal("500")));
 
         //new Buyer("Buyerino", "batatas", 5, new Object(), mainContainer);
 
