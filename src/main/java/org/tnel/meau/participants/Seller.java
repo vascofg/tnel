@@ -22,17 +22,18 @@ public class Seller {
     protected AgentController agentController;
 
     protected Product product;
-
-    BigDecimal decrement, minPrice;
+    String strategy;
+    BigDecimal minPrice, decrement;
 
     public Seller() {
     }
 
-    public Seller(String name, Product product, ContainerController containerController, BigDecimal decrement, BigDecimal minPrice) {
+    public Seller(String name, Product product, ContainerController containerController, String strategy, BigDecimal decrement, BigDecimal minPrice) {
         this.name = name;
         this.product = product;
-        this.decrement = decrement;
         this.minPrice = minPrice;
+        this.strategy = strategy;
+        this.decrement = decrement;
         try {
             this.createAgent(containerController);
         } catch (StaleProxyException e) {
@@ -43,8 +44,9 @@ public class Seller {
     public Seller(Seller other) {
         this.name = other.name;
         this.product = new Product(other.product);
-        this.decrement = other.decrement;
         this.minPrice = other.minPrice;
+        this.strategy = other.getStrategy();
+        this.decrement = other.getDecrement();
     }
 
     public Agent createAgent(ContainerController containerController) throws StaleProxyException {
@@ -78,12 +80,12 @@ public class Seller {
         this.product = product;
     }
 
-    public BigDecimal getDecrement() {
-        return decrement;
+    public String getStrategy() {
+        return strategy;
     }
 
-    public void setDecrement(BigDecimal decrement) {
-        this.decrement = decrement;
+    public void setStrategy(String strategy) {
+        this.strategy = strategy;
     }
 
     public BigDecimal getMinPrice() {
@@ -92,6 +94,14 @@ public class Seller {
 
     public void setMinPrice(BigDecimal minPrice) {
         this.minPrice = minPrice;
+    }
+
+    public void setDecrement(BigDecimal decrement) {
+        this.decrement = decrement;
+    }
+
+    public BigDecimal getDecrement() {
+        return decrement;
     }
 
     @Override
@@ -108,6 +118,7 @@ public class Seller {
     public static boolean isValid(Seller seller) {
         return (seller.getName() != null && !seller.getName().isEmpty() &&
                 Product.isValid(seller.getProduct()) &&
-                seller.decrement.compareTo(BigDecimal.ZERO) == 1 && seller.minPrice.compareTo(BigDecimal.ZERO) == 1);
+                seller.decrement.compareTo(BigDecimal.ZERO) == 1 &&
+                seller.minPrice.compareTo(BigDecimal.ZERO) == 1);
     }
 }

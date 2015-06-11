@@ -110,11 +110,11 @@ public class BuyerAgent extends Agent {
                     ACLMessage accept = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     ACLMessage reject = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
 
-                    accept.setContent("accepted");
+                    accept.setContent(numberOfRounds + " " + buyer.getMaxrounds());
                     accept.addReceiver(bestOfferAgent);
                     send(accept);
 
-                    reject.setContent(bestOffer.toPlainString());
+                    reject.setContent(bestOffer + " " + numberOfRounds + " " + buyer.getMaxrounds());
                     for (int i = 0; i < sellerAgents.size(); i++)
                         if (!sellerAgents.get(i).equals(bestOfferAgent))
                             reject.addReceiver(sellerAgents.get(i));

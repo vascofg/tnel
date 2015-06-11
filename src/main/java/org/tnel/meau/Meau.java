@@ -5,7 +5,9 @@ import jade.core.ProfileImpl;
 import jade.wrapper.AgentController;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.tnel.meau.agents.BuyerAgent;
 import org.tnel.meau.items.Product;
+import org.tnel.meau.participants.Buyer;
 import org.tnel.meau.participants.Seller;
 
 import java.math.BigDecimal;
@@ -104,14 +106,14 @@ public class Meau {
 
         products.add(new Product("Portátil normal", "Standard", new BigDecimal("750"), "computadores"));
 
-        sellers.add(new Seller("Rei das Batatas", products.get(0), mainContainer, new BigDecimal("0.5"), new BigDecimal("16")));
-        sellers.add(new Seller("El Bataton", products.get(1), mainContainer, new BigDecimal("0.1"), new BigDecimal("14")));
-        sellers.add(new Seller("Batatinha", products.get(2), mainContainer, new BigDecimal("0.6"), new BigDecimal("12")));
-        sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, new BigDecimal("0.1"), new BigDecimal("18")));
+        sellers.add(new Seller("Rei das Batatas", products.get(0), mainContainer, "reactive", new BigDecimal("0.5"), new BigDecimal("16")));
+        sellers.add(new Seller("El Bataton", products.get(1), mainContainer, "progressive", new BigDecimal("0.1"), new BigDecimal("14")));
+        sellers.add(new Seller("Batatinha", products.get(2), mainContainer, "lastround", new BigDecimal("0.6"), new BigDecimal("12")));
+        sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, "greedy", new BigDecimal("0.1"), new BigDecimal("18")));
 
-        sellers.add(new Seller("Computex", products.get(4), mainContainer, new BigDecimal("25"), new BigDecimal("500")));
+        sellers.add(new Seller("Computex", products.get(4), mainContainer, "agressive", new BigDecimal("25"), new BigDecimal("500")));
 
-        //mainContainer.acceptNewAgent("Buyerino", new BuyerAgent(50, "piça")).start();
+        //new Buyer("Buyerino", "batatas", 5, new Object(), mainContainer);
 
         // Start server
         server.start();
