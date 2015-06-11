@@ -129,7 +129,7 @@ public class SellerAgent extends Agent {
                 switch (seller.getStrategy()) {
                     case "aggressive": // na primeira ronda decrementa logo um valor grande, nao fazendo mais nada o resto do leilao
                         if (round == 0)
-                            seller.getProduct().setPrice(seller.getMinPrice().multiply(new BigDecimal(1.15)));
+                            seller.getProduct().setPrice(seller.getMinPrice().multiply(new BigDecimal("1.15")));
 
                         break;
                     case "reactive": //muda aposta se a dele for ultrapassada, nao tendo em conta a melhor oferta
@@ -141,7 +141,7 @@ public class SellerAgent extends Agent {
                         break;
 
                     case "progressive": //vai decrementando cada vez mais com o decorrer do leilao, nao tem em conta a melhor oferta
-                        decrement = (seller.getDecrement().multiply(new BigDecimal(round))).divide(new BigDecimal(2)); // decremento * nRondas / 2
+                        decrement = (seller.getDecrement().multiply(new BigDecimal(round))).divide(new BigDecimal("2")); // decremento * nRondas / 2
                         seller.getProduct().setPrice(seller.getProduct().getPrice().subtract(decrement));
                         break;
 
@@ -152,7 +152,6 @@ public class SellerAgent extends Agent {
                     case "lastround": //decrementa apenas no fim, a partir do preço da ultima melhor oferta
                         if (lastRound) {
                             seller.getProduct().setPrice(currentBestOffer.subtract(seller.getDecrement()));
-                            //System.out.println("a"+seller.getProduct().getPrice());
                         }
                         break;
 
@@ -167,7 +166,7 @@ public class SellerAgent extends Agent {
             }
         });
         // comentar para testar so com java
-        //this.doSuspend();
+        this.doSuspend();
     }
 
     @Override
