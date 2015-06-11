@@ -114,6 +114,7 @@ public class Meau {
         sellers.add(new Seller("Batatas Plus", products.get(4), mainContainer, "aggressive", new BigDecimal("0.1"), new BigDecimal("15")));
         //sellers.add(new Seller("Computex", products.get(4), mainContainer, "agressive", new BigDecimal("25"), new BigDecimal("500")));
 
+
         //new Buyer("Buyerino", "batatas", 5, new Object(), mainContainer);
 
         // Start server
