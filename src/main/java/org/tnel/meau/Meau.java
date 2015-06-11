@@ -100,18 +100,19 @@ public class Meau {
 
         // Add sample data
         products.add(new Product("Batatas vermelhas", "Batatas ideais para fritar", new BigDecimal("20"), "batatas"));
-        products.add(new Product("Batatas brancas", "Batatas ideais para cozer", new BigDecimal("18"), "batatas"));
-        products.add(new Product("Batatas roxas", "Batatas ideais para assar", new BigDecimal("25"), "batatas"));
-        products.add(new Product("Batatas amarelas", "Batatas ideais para puré", new BigDecimal("21"), "batatas"));
+        products.add(new Product("Batatas brancas", "Batatas ideais para cozer", new BigDecimal("20"), "batatas")); //18
+        products.add(new Product("Batatas roxas", "Batatas ideais para assar", new BigDecimal("20"), "batatas")); //25
+        products.add(new Product("Batatas amarelas", "Batatas ideais para puré", new BigDecimal("20"), "batatas")); //21
+        products.add(new Product("Batatas pretas", "Batatas ideais para arroz", new BigDecimal("20"), "batatas")); //21
 
-        products.add(new Product("Portátil normal", "Standard", new BigDecimal("750"), "computadores"));
+        //products.add(new Product("Portátil normal", "Standard", new BigDecimal("750"), "computadores"));
 
         sellers.add(new Seller("Rei das Batatas", products.get(0), mainContainer, "reactive", new BigDecimal("0.5"), new BigDecimal("16")));
         sellers.add(new Seller("El Bataton", products.get(1), mainContainer, "progressive", new BigDecimal("0.1"), new BigDecimal("14")));
-        sellers.add(new Seller("Batatinha", products.get(2), mainContainer, "lastround", new BigDecimal("0.6"), new BigDecimal("12")));
-        sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, "greedy", new BigDecimal("0.1"), new BigDecimal("18")));
-
-        sellers.add(new Seller("Computex", products.get(4), mainContainer, "agressive", new BigDecimal("25"), new BigDecimal("500")));
+        sellers.add(new Seller("Batatinha", products.get(2), mainContainer, "lastround", new BigDecimal("0.3"), new BigDecimal("12")));
+        sellers.add(new Seller("Sr. Batata", products.get(3), mainContainer, "greedy", new BigDecimal("0.1"), new BigDecimal("15")));
+        sellers.add(new Seller("Batatas Plus", products.get(4), mainContainer, "aggressive", new BigDecimal("0.1"), new BigDecimal("15")));
+        //sellers.add(new Seller("Computex", products.get(4), mainContainer, "agressive", new BigDecimal("25"), new BigDecimal("500")));
 
         //new Buyer("Buyerino", "batatas", 5, new Object(), mainContainer);
 
